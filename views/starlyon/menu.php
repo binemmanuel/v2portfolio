@@ -1,12 +1,20 @@
 <?php
-
+/**
+ * The about section of the Default StarLyon Theme
+ *
+ * @author: Bin Emmanuel https://binemmanuel.com/#about
+ * @link https://developers.binemmanuel.com/theme/starlyon
+ * @package Portfolio
+ * @version 1.0
+ * @since StarLyon 1.0
+ */
 use portfolio\Menu;
 
+// Instantiate a Menu Object.
 $menu = new Menu;
 
 // Fetch all menu.
 $menus = $menu->fetch('top menu');
-
 ?>
 
 <!-- .main-menu -->
@@ -48,7 +56,7 @@ $menus = $menu->fetch('top menu');
         <!-- social-menu /-->
 
         <!-- .nav-item -->
-        <?php foreach ($menus[0] as $menu): ?>
+        <?php foreach ($menus[0] as $menu): // Loop though the menu. ?>
             <li class="nav-item"><a href="<?= $menu['link'] ?>" class="nav-link"><?= $menu['name'] ?></a></li>
         <?php endforeach ?>
         <!-- .nav-item /-->

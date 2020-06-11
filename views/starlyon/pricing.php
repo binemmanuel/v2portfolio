@@ -1,3 +1,15 @@
+<?php
+/**
+ * The pricing section of the Default StarLyon Theme
+ *
+ * @author: Bin Emmanuel https://binemmanuel.com/#about
+ * @link https://developers.binemmanuel.com/theme/starlyon
+ * @package Portfolio
+ * @version 1.0
+ * @since StarLyon 1.0
+ */
+?>
+
 <!-- .pricing -->
 <section class="pricing" id="pricing" data-page="pricing">
     <h2>Pricing</h2>

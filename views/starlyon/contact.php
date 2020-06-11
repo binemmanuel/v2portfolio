@@ -1,3 +1,15 @@
+<?php
+/**
+ * The contact section of the Default StarLyon Theme
+ *
+ * @author: Bin Emmanuel https://binemmanuel.com/#about
+ * @link https://developers.binemmanuel.com/theme/starlyon
+ * @package Portfolio
+ * @version 1.0
+ * @since StarLyon 1.0
+ */
+use function portfolio\clean_data;
+?>
 <!-- .contact -->
 <section class="contact" id="contact" data-page="contact me">
     <h2>Contact Me</h2>

@@ -1,3 +1,15 @@
+<?php
+/**
+ * The services section of the Default StarLyon Theme
+ *
+ * @author: Bin Emmanuel https://binemmanuel.com/#about
+ * @link https://developers.binemmanuel.com/theme/starlyon
+ * @package Portfolio
+ * @version 1.0
+ * @since StarLyon 1.0
+ */
+?>
+
 <!-- .slider-container #services -->
 <section class="services slider-container" id="services" data-page="services">
     <h2>Services</h2>

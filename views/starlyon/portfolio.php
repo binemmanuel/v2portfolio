@@ -1,3 +1,15 @@
+<?php
+/**
+ * The portfolio section of the Default StarLyon Theme
+ *
+ * @author: Bin Emmanuel https://binemmanuel.com/#about
+ * @link https://developers.binemmanuel.com/theme/starlyon
+ * @package Portfolio
+ * @version 1.0
+ * @since StarLyon 1.0
+ */
+?>
+
 <!-- .portfolio #portfolio -->
 <section class="portfolio" id="portfolio" data-page="portfolio">
     <h2>Portfolio</h2>
