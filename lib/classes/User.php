@@ -654,7 +654,7 @@ class User{
         $user->website =$this->website;
         $user->user_role =$this->user_role;
         $user->active = $this->active;
-        $user->created_on =$this->created_on;
+        $user->created_on = (!empty($this->created_on)) ? $this->created_on : '';
 
         return $user;
     }
@@ -836,43 +836,75 @@ class User{
         $keyword = clean_data('%'. $keyword .'%');
 
         // Prepare a statement.
-        $sql = $db->prepare('SELECT `me_users`.`id`, `me_users`.`username`, `me_users`.`email`, `me_users`.`userRole`, `me_users`.`active`, `me_users_info`.`full_name`, `me_users_info`.`website`, `me_users_info`.`bio` FROM me_users_info right JOIN me_users ON `me_users_info`.`user_id` = `me_users`.`id` WHERE `me_users`.`username` LIKE ?');
+        $sql = $db->prepare(
+            'SELECT
+                `me_users`.`id`,
+                `me_users`.`username`,
+                `me_users`.`email`,
+                `me_users`.`userRole`,
+                `me_users`.`active`,
+                `me_users_info`.`full_name`,
+                `me_users_info`.`website`,
+                `me_users_info`.`bio`
+            FROM
+                me_users_info
+            right JOIN
+                me_users
+            ON
+                `me_users_info`.`user_id` = `me_users`.`id`
+            WHERE
+                `me_users`.`username`
+            LIKE
+                ?'
+        );
 
         // Bind parameter.
         $sql->bind_param('s', $keyword);
 
         // Execute.
-        if ($sql->execute()) {
+        $sql->execute();
 
-            // Bind result.
-            $sql->bind_result($users['id'], $users['username'], $users['email'], $users['user_role'], $users['active'], $users['full_name'],  $users['website'], $users['bio']);
+        // Bind result.
+        $sql->bind_result(
+            $id,
+            $username,
+            $email,
+            $user_role,
+            $active,
+            $full_name,
+            $website,
+            $bio
+        );
 
-            // Initialize an array.
-            $data = [];
+        // Initialize an array.
+        $data = [];
 
-            // Fetch and loop thought the data.
-            while ($sql->fetch()) {
-                // Instantiate an object.
-                $user = new User($users['id'], $users['username'], NULL, $users['email'], $users['user_role'], $users['active'], $users['token'] = NULL, $resetToken = NULL, NULL, NULL, $users['full_name'], $users['website'], NULL, NULL);
+        // Fetch and loop thought the data.
+        while ($sql->fetch()) {
+            // Instantiate an object.
+            $user = new User;
+            $user->id = $id;
+            $user->username = $username;
+            $user->email = $email;
+            $user->user_role = $user_role;
+            $user->active = $active;
+            $user->full_name = $full_name;
+            $user->website = $website;
 
-                // Get the user data.
-                $user_data = $user->get_profile();
+            // Get the user data.
+            $user_data = $user->get_profile();
 
-                // Create an array of arrays
-                array_push($data, $user_data);
-            }
-
-            return $data;
+            // Create an array of arrays
+            array_push($data, $user_data);
         }
 
         // Close Statement.
         $sql->close();
-
+        
         // close connection.
         $db->close();
-
-        return false;
         
+        return $data;
     }
 
     /**

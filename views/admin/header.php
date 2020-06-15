@@ -13,7 +13,7 @@
 use portfolio\SiteInfo;
 
 $site_info = new SiteInfo;
-$site_info = $site_info->fetch();
+$site_info = (object) $site_info->fetch();
 ?>
 
 <!DOCTYPE html>
@@ -28,6 +28,9 @@ $site_info = $site_info->fetch();
         <!-- Custom CSS -->
         <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\style.css" />
 
+        <!-- Loader CSS -->
+        <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\loader.css" type="text/css" />
+        
         <!-- Font awesome -->
         <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\assets\css\font-awesome.min.css" />
     </head>
@@ -59,7 +62,7 @@ $site_info = $site_info->fetch();
                         </li>
                     </ul>
 
-                    <ul class="nav-list user">
+                    <ul class="nav-list user-icon">
                         <li class="nav-item">
                             <a href="#" class="nav-link" title="Bin Emmanuel">
                                 <i class="fa fa-user"></i>

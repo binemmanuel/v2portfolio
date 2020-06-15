@@ -874,6 +874,7 @@ pre{
 }
 
 /* === Category Page === */
+.user-icon,
 .user,
 .tag,
 .testimonial,
@@ -887,6 +888,9 @@ pre{
 .user{
     justify-content: center !important;
     align-items: center !important;
+}
+.user-icon{
+    align-items: flex-end !important;
 }
 .user-header,
 .tag-header,

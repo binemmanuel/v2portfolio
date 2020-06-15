@@ -120,10 +120,6 @@ class Project
 		// Instantiate a DB object.
 		$db = new Database();
 
-		// Check if the media object has an ID.
-		if (empty($this->id))
-			trigger_error('<strong>Project::get()</strong> Attempt to get a Project object that doestn\'t have it\'s ID property set.', E_USER_ERROR);
-
 		// Sanitize ID.
 		$id = (int) clean_data($this->id);
 
@@ -147,6 +143,87 @@ class Project
 		}
 
 		return false;
+	}
+
+	/**
+	 * This method fetches Projects by status.
+	 * 
+	 * @param String The status.
+	 * @return Array A list of the Projects.
+	 */
+	public function get_by_status(string $status): array
+	{
+		// Instantiate a DB object.
+		$db = new Database();
+
+		// Sanitize the status.
+		$status = (string) clean_data($status);
+
+		// Prepare a statement.
+		$stmt = $db->prepare(
+			'SELECT
+				id,
+				title,
+				content,
+				summary,
+				author,
+				featured_image,
+				status,
+				comment_status,
+				comment_count,
+				posted_on
+			FROM
+				me_project
+			WHERE
+				status = ?
+			ORDER BY id DESC'
+		);
+
+		// Bind Parameter.
+		$stmt->bind_param('s', $status);
+
+		// Execute.
+		if ($stmt->execute()) {
+			// Bind result value.
+			$stmt->bind_result(
+				$id,
+				$title,
+				$content,
+				$summary,
+				$author,
+				$featured_image,
+				$status,
+				$comment_status,
+				$comment_count,
+				$posted_on
+			);
+
+			// Initialize an empty array.
+			$projects = [];
+
+			// Retrieve rows.
+			while ($stmt->fetch()) {
+				// Instantiate a Project Object.
+				$project = new Project;
+
+				// Return an Oject of the project.
+				$project->id = $id;
+				$project->title = $title;
+				$project->content = $content;
+				$project->summary = $summary;
+				$project->author = $author;
+				$project->featured_image = $featured_image;
+				$project->status = $status;
+				$project->comment_status = $comment_status;
+				$project->comment_count = $comment_count;
+				$project->posted_on = $posted_on;
+
+				array_push($projects, $project);
+			}
+			
+		}
+
+		return $projects;
 	}
 
 	/**
@@ -249,9 +326,10 @@ class Project
 	}
 
 	/**
-	 *  Get the total number of rows a.
-	 *  
-	 *  @return int The number of a specific column || 0.
+	 * This method counts projects by status.
+	 * 
+	 * @param String The status.
+	 * @return Int The number of projects.
 	 */
 	public static function count_rows(string $column = NULL): int
 	{
@@ -263,35 +341,34 @@ class Project
 
 		if (empty($column)) {
 			// Prepare a Statement.
-			$stmt = $db->prepare('SELECT COUNT(*) as total_rows FROM me_project');
+			$stmt = $db->prepare('SELECT COUNT(*) FROM me_project');
 		} else {
 			// Prepare a Statement.
-			$stmt = $db->prepare('SELECT COUNT(*) as totalRows FROM me_project WHERE status = ?');
+			$stmt = $db->prepare('SELECT COUNT(*) FROM me_project WHERE status = ?');
 
 			// Bind parameter.
 			$stmt->bind_param('s', $column);
 		}
 
 		// Execute Query.
-		if ($stmt->execute()) {
-			// Bind the result to a variable.
-			$stmt->bind_result($total);
+		$stmt->execute();
 
-			if ($stmt->fetch()) {
-				return $total;
-			};
-		}
+		// Bind the result to a variable.
+		$stmt->bind_result($count);
 
-		return 0;
-
+		// Fetch data.
+		$stmt->fetch();
+		
 		// Close Statement.
 		$stmt->close();
 
 		// Close dbection.
 		$db->close();
+
+		return $count;
 	}
 
-	public static function search(string $keyword, string $column, string $offset, int $num_rows = 2000000)
+	public static function search(string $keyword)
 	{
 		// Instantiate a DB object.
 		$db = new Database();
@@ -299,28 +376,59 @@ class Project
 		$keyword = clean_data('%'. $keyword .'%');
 
 		// Prepare a statement.
-		$stmt = $db->prepare('SELECT * FROM me_project WHERE content OR author OR title OR status LIKE ?');
+		$stmt = $db->prepare(
+			'SELECT
+				*
+			FROM
+				me_project
+			WHERE
+				title
+			LIKE
+				?'
+		);
 
 		// Bind parameter.
 		$stmt->bind_param('s', $keyword);
 
-		if ($stmt->execute()) {
-			// Bind result.
-			$stmt->bind_result($id, $author, $title, $content, $summary, $featured_image, $status, $comment_status, $comment_count, $posted_on);
+		$stmt->execute();
 
-			// Initialize an empty array.
-			$data = [];
-			
-			while ($stmt->fetch()) {
-				// Instantiate an Object.
-				$search = new Project($id, $title, $content, $summary, $author, $featured_image, $status, $comment_status, $comment_count, $posted_on);
+		// Bind result.
+		$stmt->bind_result(
+			$id,
+			$author,
+			$title,
+			$content,
+			$summary,
+			$featured_image,
+			$status,
+			$comment_status,
+			$comment_count,
+			$posted_on
+		);
 
-				// Store an array of objects.
-				array_push($data, $search);
+		// Initialize an empty array.
+		$data = [];
+		
+		while ($stmt->fetch()) {
+			// Instantiate an Object.
+			$projects = new Project(
+				$id,
+				$title,
+				$content,
+				$summary,
+				$author,
+				$featured_image,
+				$status,
+				$comment_status,
+				$comment_count,
+				$posted_on
+			);
 
-			}
-				return $data;
+			// Store an array of objects.
+			array_push($data, $projects);
+
 		}
+		
 
 		// Close Statement.
 		$stmt->close();
@@ -328,8 +436,7 @@ class Project
 		// close dbection.
 		$db->close();
 
-		return false;
-		
+		return $data;
 	}
 
 	/**

@@ -415,7 +415,7 @@ class Category {
 			for ($i = 0; $i < count($cat_ids); $i++) { 
 				// Sanitize the Category IDs.
 				$cat_ids[$i] = clean_data(stripslashes($cat_ids[$i]));
-
+				
 				// Add "category <> $cat_ids[$i]" to query.
 				$query .= " category <> $cat_ids[$i]";
 
@@ -423,11 +423,11 @@ class Category {
 				if ($i !== (count($cat_ids) - 1)) {
 					// Add "AND" if it's not the last $cat_ids
 					$query .= ' AND';
-
+					
 				} else {
 					// Add "LIMIT 1" if it's the last $cat_ids
 					$query .= " AND project = $proejct_id LIMIT 1";
-
+					
 				}
 			}
 		} else {

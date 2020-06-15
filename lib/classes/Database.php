@@ -22,7 +22,7 @@ class Database extends mysqli
             // Set character ser to UTF-8.
             parent::set_charset(CHARSET);
         
-        } catch (\mysqli_sql_exception  $e) {
+        } catch (\mysqli_sql_exception  $e) { // Catch SQL errors.
             ?>
             <pre>
                 <?php throw new \mysqli_sql_exception($e->getMessage(), $e->getCode()) // Throw error message. ?>

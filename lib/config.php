@@ -56,8 +56,10 @@ define('DB_SERVER', 'localhost');
 /** Set character set */
 define('CHARSET', 'utf8mb4');
 
+// Initialize a Site Info Object.
 $site_info = new SiteInfo;
-$site_info = $site_info->fetch();
+$site_info = (object) $site_info->fetch();
+
 // Set web root based on enviroment.
 if (IS_ENV_PRODUCTION) {
     define('WEB_ROOT', 'http://localhost/portfolio/');

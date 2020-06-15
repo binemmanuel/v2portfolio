@@ -19,8 +19,8 @@ use function portfolio\clean_data;
 
 <!-- .flexbox .cta-btn-flex -->
 <div class="flexbox cta-btn-flex">
-    <?php if (!empty($this->response)): // Check if there is a response. ?>
-        <?php $response = $this->response; ?>
+    <?php if (!empty($this->response->project) || !empty($this->response)): // Check if there is a response. ?>
+        <?php $response = (!empty($this->response->project)) ? $this->response->project : $this->response; ?>
         <h1>Edit Project</h1>
     
     <?php else: ?>

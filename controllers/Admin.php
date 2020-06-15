@@ -8,6 +8,7 @@ use model\Tag;
 use model\User;
 use model\SiteInfo;
 use portfolio\BaseController;
+use portfolio\Project as PortfolioProject;
 
 use function portfolio\clean_data;
 
@@ -46,6 +47,35 @@ class Admin extends BaseController
     {
         // switch based on an action.
         switch ($action) {
+            case 'search':
+                // Instantiate a Category Object.
+                $this->model = new Project;
+
+                // Sanitize the category's ID.
+                $this->id = (int) clean_data($id);
+
+                // Instantiate a Category Model Object.
+                $model = (new $this->model);
+
+                if (
+                    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+                    !empty($_POST['async'])
+                ) {
+                    // Search for the data.
+                    $this->view->response = $model->search($_POST);
+
+                    // Render a projects page.
+                    $this->view->load('search-projects', $this->admin_template);
+                } else {
+                    // Return a response to the view.
+                    $this->view->response = $model->search($_POST);
+                    
+                    // Render a projects page.
+                    $this->view->render('projects', $this->admin_template);
+                }
+
+                break;
+
             case 'category':
                 // Instantiate a Category Object.
                 $this->model = new Category;
@@ -137,13 +167,64 @@ class Admin extends BaseController
 
                 break;
             
+            case 'published':
+                // Instantiate a Project Object.
+                $this->model = new Project;
+                
+                // Sanitize the projects's ID.
+                $this->id = (int) clean_data($id);
+                
+                // Instantiate a Project Model Object.
+                $model = (new $this->model);
+
+                // Resture a response.
+                $this->view->response = $model->get_pulished();
+
+                // Render a projects page.
+                $this->view->render('projects', $this->admin_template);
+                break;
+
+            case 'trash':
+                // Instantiate a Project Object.
+                $this->model = new Project;
+                
+                // Sanitize the projects's ID.
+                $this->id = (int) clean_data($id);
+                
+                // Instantiate a Project Model Object.
+                $model = (new $this->model);
+
+                // Resture a response.
+                $this->view->response = $model->get_trash();
+
+                // Render a projects page.
+                $this->view->render('projects', $this->admin_template);
+                break;
+
+            case 'draft':
+                // Instantiate a Project Object.
+                $this->model = new Project;
+                
+                // Sanitize the projects's ID.
+                $this->id = (int) clean_data($id);
+                
+                // Instantiate a Project Model Object.
+                $model = (new $this->model);
+
+                // Resture a response.
+                $this->view->response = $model->get_draft();
+
+                // Render a projects page.
+                $this->view->render('projects', $this->admin_template);
+                break;
+
             default:
                 // Instantiate a Project Object.
                 $model = $this->model = new Project;
 
                 // Get all projects and send them to
                 // the project view.
-                $this->view->projects = $model->get();
+                $this->view->response = $model->get();
                 
                 // Render all projects page.
                 $this->view->render('projects', $this->admin_template);
@@ -232,8 +313,36 @@ class Admin extends BaseController
         // Instantiate a Category Object.
         $model = new User;
 
-        
         switch ($action) {
+            case 'search':
+                // Instantiate a Category Object.
+                $this->model = new User;
+
+                // Sanitize the category's ID.
+                $this->id = (int) clean_data($id);
+
+                // Instantiate a Category Model Object.
+                $model = (new $this->model);
+
+                if (
+                    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+                    !empty($_POST['async'])
+                ) {
+                    // Search for the data.
+                    $this->view->response = $model->search($_POST);
+
+                    // Render a projects page.
+                    $this->view->load('search-users', $this->admin_template);
+                } else {
+                    // Return a response to the view.
+                    $this->view->response = $model->search($_POST);
+                    
+                    // Render a projects page.
+                    $this->view->render('users', $this->admin_template);
+                }
+
+                break;
+
             case 'edit':
                 // Sanitize the category's ID.
                 $this->id = (int) clean_data($id);
@@ -250,7 +359,46 @@ class Admin extends BaseController
                 // echo bin2hex(random_bytes(5));
 
                 break;
+
+            case 'admins':
+                // Sanitize the category's ID.
+                $this->id = (int) clean_data($id);
+
+                // Get a users bt ID.
+                $this->view->response = $model->get_admins();
+
+                // Render the page.
+                $this->view->render('users', $this->admin_template);
+                // echo bin2hex(random_bytes(5));
+
+                break;
             
+            case 'moderators':
+                // Sanitize the category's ID.
+                $this->id = (int) clean_data($id);
+
+                // Get a users bt ID.
+                $this->view->response = $model->get_moderators();
+
+                // Render the page.
+                $this->view->render('users', $this->admin_template);
+                // echo bin2hex(random_bytes(5));
+
+                break;
+            
+            case 'subscribers':
+                // Sanitize the category's ID.
+                $this->id = (int) clean_data($id);
+
+                // Get a users bt ID.
+                $this->view->response = $model->get_subscribers();
+
+                // Render the page.
+                $this->view->render('users', $this->admin_template);
+                // echo bin2hex(random_bytes(5));
+
+                break;
+
             default:
                 // Get all users.
                 $this->view->response = $model->get();

@@ -10,8 +10,13 @@
  * @since Admin 1.0
  */
 
+use function portfolio\clean_data;
+
 // All Projects.
-$projects = $this->projects;
+$projects = $this->response->projects;
+
+// Number of projects
+$count = $this->response->counts;
 ?>
 
 <!-- .flexbox .cta-btn-flex -->
@@ -24,17 +29,22 @@ $projects = $this->projects;
 <div class="project-header">
     <!-- .project-actions -->
     <div class="project-actions">
-        <a href="">All (15)</a>
-        <a href="">Published (5)</a>
-        <a href="">Trash (5)</a>
-        <a href="">Draft (5)</a>
+        <a href="<?= WEB_ROOT ?>admin/projects/">All (<?= clean_data($count->all) ?>)</a>
+        <a href="<?= WEB_ROOT ?>admin/projects/published">Published (<?= clean_data($count->published) ?>)</a>
+        <a href="<?= WEB_ROOT ?>admin/projects/trash">Trash (<?= clean_data($count->trash) ?>)</a>
+        <a href="<?= WEB_ROOT ?>admin/projects/draft">Draft (<?= clean_data($count->draft) ?>)</a>
     </div>
     <!-- .project-actions /-->
 
     <!-- .search-bar -->
     <div class="search-bar">
-        <form action="" method="post">
-            <input type="search" name="keyword" placeholder="Search" />
+        <form action="<?= WEB_ROOT ?>/admin/projects/search" method="post">
+            <input
+                type="search"
+                name="keyword"
+                placeholder="Search"
+                autocomplete="off"
+                id="search-bar" />
         </form>
     </div>
     <!-- .search-bar /-->
@@ -57,7 +67,7 @@ $projects = $this->projects;
                 <th>Tags</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="search-result">
             <?php foreach ($projects as $project): ?>
                 <tr>
                     <td class="text-center">
@@ -105,3 +115,20 @@ $projects = $this->projects;
     <!-- .table .table-100 .text-left .table-responsive /-->
 </section>
 <!-- .projects-panel /-->
+
+<script>
+    window.onload = () => {
+        const search_bar = $('#search-bar')
+
+        search_bar.addEventListener('keyup', (event) => {
+            let keyword = search_bar.value
+        
+            const ajax = Ajax(
+                'post',
+                '<?= WEB_ROOT ?>/admin/projects/search',
+                '#search-result',
+                `keyword=${keyword}&async=true`
+            )
+        })
+    }
+</script>

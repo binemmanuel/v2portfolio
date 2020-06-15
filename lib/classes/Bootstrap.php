@@ -70,6 +70,5 @@ class Bootstrap
 		} else{
 			(new Home())->get();
 		}
-		return false;
 	}
 }

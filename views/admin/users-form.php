@@ -1,5 +1,5 @@
 <?php
-$response = $this->response;
+$response = $this->response->users;
 
 if (!empty($this->update_response)) {
     $update_response = $this->update_response;

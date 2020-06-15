@@ -15,19 +15,66 @@ class User extends BaseModel
     function __construct()
     {
         parent::__construct();
+
+        // Instantiate a User Object.
+        $this->user = new PortfolioUser;
+
+        // Instantiate an std Object.
+        $this->response = new stdClass;
+
+        // Instantiate an std Object.
+        $counts = new stdClass;
+
+        // Count all user.
+        $counts->all = $this->user->count_rows();
+        $counts->administrators = $this->user->count_rows('administrator');
+        $counts->moderators = $this->user->count_rows('moderator');
+        $counts->subscribers = $this->user->count_rows('subscriber');
+
+        $this->response->counts = $counts;
     }
 
     public function get(int $id = null)
     {
-        $user = new PortfolioUser;
-        
         if (!empty($id)) {
-            $response = $user->get($id);
+            $this->response->users = $this->user->get($id);
         } else {
-            $response = $user->get_all('all');
+            $this->response->users = $this->user->get_all('all');
         }
 
-        return $response;
+        return $this->response;
+    }
+
+    public function get_admins()
+    {
+        $this->response->users = $this->user->get_all('administrator');
+
+        return $this->response;
+    }
+
+    public function get_moderators()
+    {
+        
+        $this->response->users = $this->user->get_all('moderator');
+
+        return $this->response;
+    }
+
+    public function get_subscribers()
+    {
+        
+        $this->response->users = $this->user->get_all('subscriber');
+
+        return $this->response;
+    }
+
+    public function search(array $data)
+    {        
+        $keyword = (!empty($data['keyword'])) ? clean_data($data['keyword']) : '';
+        
+        $this->response->users = $this->user->search($keyword);
+
+        return $this->response;
     }
 
     public function update(array $data): object
@@ -98,20 +145,19 @@ class User extends BaseModel
             ];
         } else {
             // Instantiate a user object.
-            $user = new PortfolioUser;
-            $user_info = new UserInfo();
+                $user_info = new UserInfo();
 
             // Set data.
-            $user->set_id((int) clean_data($data['id']));
-            $user->set_email((string) clean_data($data['email']));
-            $user->set_status((int) clean_data($data['status']));
-            $user->set_user_role((string) clean_data($data['user_role']));
+            $this->user->set_id((int) clean_data($data['id']));
+            $this->user->set_email((string) clean_data($data['email']));
+            $this->user->set_status((int) clean_data($data['status']));
+            $this->user->set_user_role((string) clean_data($data['user_role']));
 
             if (empty($data['password'])) {
-                $user->set_password((string) $user->get_password());
+                $this->user->set_password((string) $this->user->get_password());
             } else {
                 $data['password'] = password_hash(trim($data['password']), PASSWORD_DEFAULT);
-                $user->set_password($data['password']);
+                $this->user->set_password($data['password']);
             }
 
              // Check if first and last name is set.
@@ -127,7 +173,7 @@ class User extends BaseModel
             $user_info->set_bio((string) clean_data($data['bio']));
 
             if ($user_info->has_data()) {
-                if ($user_info->update() && $user->update()) {
+                if ($user_info->update() && $this->user->update()) {
                     $response->error = false;
                     $response->message = 'Updated Successfully.';
                     $response->type = '';
@@ -143,7 +189,7 @@ class User extends BaseModel
                     ];
                 };
             } else {
-                if ($user_info->save() && $user->update()) {
+                if ($user_info->save() && $this->user->update()) {
                     $response->error = false;
                     $response->message = 'Updated Successfully.';
                     $response->type = '';

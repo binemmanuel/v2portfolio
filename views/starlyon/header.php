@@ -15,7 +15,7 @@ use portfolio\SiteInfo;
 use function portfolio\is_home_page;
 
 $site_info = new SiteInfo;
-$site_info = $site_info->fetch();
+$site_info = (object) $site_info->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="en">

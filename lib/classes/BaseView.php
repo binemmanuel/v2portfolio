@@ -33,4 +33,18 @@ class BaseView
 			require "views/$template/footer.php";
 		}
 	}
+
+	public function load(
+		string $view, 
+		string $template = 'starlyon'
+	): void
+	{
+		switch ($view) {
+			case '/':
+				$view = 'index';
+				break;
+		}
+
+		require "views/$template/$view.php";
+	}
 }

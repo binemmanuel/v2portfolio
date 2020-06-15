@@ -13,32 +13,75 @@ class Project extends BaseModel
     function __construct()
     {
         parent::__construct();
+
+        // Instantiate a Project Object.
+        $this->project = new PortfolioProject();
+
+        // Instantiate an std Object.
+        $this->response = new stdClass;
+
+        // Instantiate an std Object.
+        $counts = new stdClass;
+
+        // Count all projects.
+        $counts->all = $this->project->count_rows();
+        $counts->published = $this->project->count_rows('published');
+        $counts->trash = $this->project->count_rows('trash');
+        $counts->draft = $this->project->count_rows('draft');
+
+        $this->response->counts = $counts;
+
+    }
+
+    public function search(array $data)
+    {        
+        $keyword = (!empty($data['keyword'])) ? clean_data($data['keyword']) : '';
+        
+        $this->response->projects = $this->project->search($keyword);
+
+        return $this->response;
     }
 
     public function get(int $id = null)
-    {
-        $project = new PortfolioProject();
-        
+    {        
         if (empty($id)) {
-            $response = $project->get_all();
+            $this->response->projects = $this->project->get_all();
         } else {
-            $project->id = clean_data($id);
-            $response = $project->get();
+            $this->project->id = clean_data($id);
+            $this->response->project = $this->project->get();
         }
 
-        return $response;
+        return $this->response;
+    }
+
+    public function get_pulished()
+    {
+        $this->response->projects = $this->project->get_by_status('published');
+
+        return $this->response;
+    }
+
+    public function get_trash()
+    {
+        $this->response->projects = $this->project->get_by_status('trash');
+
+        return $this->response;
+    }
+
+    public function get_draft()
+    {
+        $this->response->projects = $this->project->get_by_status('draft');
+
+        return $this->response;
     }
 
     public function process_data(array $data): object
     {
-        // Initalize an std Class
-        $response = new stdClass;
-
         if (empty($data['title'])) {
-            $response->error = true;
-            $response->message = 'Please enter the title of your project.';
-            $response->type = 'title';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'Please enter the title of your project.';
+            $this->response->type = 'title';
+            $this->response->filled_data = [
                 'title' => $data['title'], 
                 'description' => $data['description'], 
                 'categories' => (!empty($data['categories'])) ? $data['categories'] : ['uncategorized'],
@@ -46,10 +89,10 @@ class Project extends BaseModel
                 'open-comment' => (!empty($data['comments'])) ? 'open' : 'close'
             ];
         } elseif (empty($data['description'])) {
-            $response->error = true;
-            $response->message = 'Please write at least a short note about the your project.';
-            $response->type = 'description';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'Please write at least a short note about the your project.';
+            $this->response->type = 'description';
+            $this->response->filled_data = [
                 'title' => $data['title'], 
                 'description' => $data['description'], 
                 'categories' => (!empty($data['categories'])) ? $data['categories'] : ['uncategorized'],
@@ -57,10 +100,10 @@ class Project extends BaseModel
                 'open-comment' => (!empty($data['comments'])) ? 'open' : 'close'
             ];
         } elseif (empty($data['featured-image'])) {
-            $response->error = true;
-            $response->message = 'You need to set a featured image for your project.';
-            $response->type = 'featured-image';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'You need to set a featured image for your project.';
+            $this->response->type = 'featured-image';
+            $this->response->filled_data = [
                 'title' => $data['title'], 
                 'description' => $data['description'], 
                 'categories' => (!empty($data['categories'])) ? $data['categories'] : ['uncategorized'],
@@ -68,10 +111,10 @@ class Project extends BaseModel
                 'open-comment' => (!empty($data['comments'])) ? 'open' : 'close'
             ];
         } elseif (!filter_var($data['featured-image'], FILTER_VALIDATE_URL)) {
-            $response->error = true;
-            $response->message = 'Invalide link to the featured image.';
-            $response->type = 'featured-image';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'Invalide link to the featured image.';
+            $this->response->type = 'featured-image';
+            $this->response->filled_data = [
                 'title' => $data['title'], 
                 'description' => $data['description'], 
                 'categories' => (!empty($data['categories'])) ? $data['categories'] : ['uncategorized'],
@@ -133,37 +176,31 @@ class Project extends BaseModel
                         $category_obj->id,
                         $project->id
                     )) {
-                        $response->error = false;
-                        $response->message = 'Creaeted successfully';
-                        $response->type = null;
-                        $response->filled_data = [];
+                        $this->response->error = false;
+                        $this->response->message = 'Creaeted successfully';
+                        $this->response->type = null;
+                        $this->response->filled_data = [];
                     }
                 }
             }
         }
 
-        return $response;
+        return $this->response;
     }
 
     public function update(array $data)
     {
-        // Instantiate a Project Object.
-        $project = new PortfolioProject;
-
-        // Initalize an std Class.
-        $response = new stdClass;
-
         // Set data.
-        $project->id = (int) clean_data($data['id']);
-        $project->title = (string) clean_data($data['title']);
-        $project->content = (string) clean_data($data['description']);
-        $project->comment_status = (string) (!empty($data['comments'])) ? 'open' : 'close';
+        $this->project->id = (int) clean_data($data['id']);
+        $this->project->title = (string) clean_data($data['title']);
+        $this->project->content = (string) clean_data($data['description']);
+        $this->project->comment_status = (string) (!empty($data['comments'])) ? 'open' : 'close';
 
         if (!filter_var($data['featured-image'], FILTER_VALIDATE_URL)) {
-            $response->error = true;
-            $response->message = 'Invalide link to the featured image.';
-            $response->type = 'featured-image';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'Invalide link to the featured image.';
+            $this->response->type = 'featured-image';
+            $this->response->filled_data = [
                 'title' => $data['title'], 
                 'description' => $data['description'], 
                 'categories' => (!empty($data['categories'])) ? $data['categories'] : ['uncategorized'],
@@ -172,7 +209,7 @@ class Project extends BaseModel
             ];
         } else {
             // Set the featured image of the project. 
-            $project->featured_image = (string) clean_data($data['featured-image']);
+            $this->project->featured_image = (string) clean_data($data['featured-image']);
 
             // Instantiate an empty array.
             $cat_ids = [];
@@ -187,9 +224,9 @@ class Project extends BaseModel
                     $category_obj->id = $category_obj->exists($category);
 
                     // Check if the project hasn't been added to a category.
-                    if (!$category_obj->is_project_added($category_obj->id, $project->id)) {
+                    if (!$category_obj->is_project_added($category_obj->id, $this->project->id)) {
                         // Add the project to the category.
-                        $category_obj->add_project($category_obj->id, $project->id);
+                        $category_obj->add_project($category_obj->id, $this->project->id);
                     }
 
                     // Create a list of all the categorys that has been added.`
@@ -202,28 +239,28 @@ class Project extends BaseModel
                 }
 
                 // Remove categories that has been unchecked.
-                $category_obj->remove_project($cat_ids, $project->id);
+                $category_obj->remove_project($cat_ids, $this->project->id);
             } else {
                 // Instantiate a Category Object.
                 $category_obj = new Category;
 
                 // Remove all category that has been unchecked.
-                $category_obj->remove_project($cat_ids, $project->id);
+                $category_obj->remove_project($cat_ids, $this->project->id);
 
                 // Check if the project has been uncategorized.
-                if (!$category_obj->is_project_added(42, $project->id)) {
+                if (!$category_obj->is_project_added(42, $this->project->id)) {
                     // Uncategorized the project.
-                    $category_obj->add_project(42, $project->id);
+                    $category_obj->add_project(42, $this->project->id);
                 }
             }
 
             // Update the project.
-            if (!$project->update()) {
-                $response->id = clean_data($data['id']);
-                $response->error = true;
-                $response->message = 'Sorry, something went wrong when tring to update the project.';
-                $response->type = 'project update failed';
-                $response->filled_data = [
+            if (!$this->project->update()) {
+                $this->response->id = clean_data($data['id']);
+                $this->response->error = true;
+                $this->response->message = 'Sorry, something went wrong when tring to update the project.';
+                $this->response->type = 'project update failed';
+                $this->response->filled_data = [
                     'title' => $data['title'], 
                     'description' => $data['description'], 
                     'categories' => (!empty($data['categories'])) ? $data['categories'] : ['uncategorized'],
@@ -231,14 +268,14 @@ class Project extends BaseModel
                     'open-comment' => (!empty($data['comments'])) ? 'open' : 'close'
                 ];
             } else {
-                $response->id = clean_data($data['id']);
-                $response->error = false;
-                $response->message = "
+                $this->response->id = clean_data($data['id']);
+                $this->response->error = false;
+                $this->response->message = "
                 Updated successfully. 
                 Click <a class='alert-link' href='". WEB_ROOT. "admin/projects'>here</a> 
                 to go back to the projects";
-                $response->type = null;
-                $response->filled_data = [
+                $this->response->type = null;
+                $this->response->filled_data = [
                     'title' => $data['title'], 
                     'description' => $data['description'], 
                     'categories' => (!empty($data['categories'])) ? $data['categories'] : ['uncategorized'],
@@ -249,7 +286,7 @@ class Project extends BaseModel
         }
         
 
-        return $response;
+        return $this->response;
     }
 
     public function make_string(

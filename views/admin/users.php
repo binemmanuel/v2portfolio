@@ -12,7 +12,11 @@
 
 use function portfolio\clean_data;
 
-$response = $this->response;
+// Get all users.
+$response = $this->response->users;
+
+// Get the number of users.
+$count = $this->response->counts;
 ?>
 
 <!-- .flexbox .cta-btn-flex -->
@@ -25,17 +29,22 @@ $response = $this->response;
 <div class="project-header">
     <!-- .project-actions -->
     <div class="project-actions">
-        <a href="">All (15)</a>
-        <a href="">Admins (5)</a>
-        <a href="">Moderator (5)</a>
-        <a href="">Subscribers (5)</a>
+        <a href="<?= WEB_ROOT ?>admin/users/">All (<?= clean_data($count->all) ?>)</a>
+        <a href="<?= WEB_ROOT ?>admin/users/admins">Admins (<?= clean_data($count->administrators) ?>)</a>
+        <a href="<?= WEB_ROOT ?>admin/users/moderators">Moderator (<?= clean_data($count->moderators) ?>)</a>
+        <a href="<?= WEB_ROOT ?>admin/users/subscribers">Subscribers (<?= clean_data($count->subscribers) ?>)</a>
     </div>
     <!-- .project-actions /-->
 
     <!-- .search-bar -->
     <div class="search-bar">
         <form action="" method="post">
-            <input type="search" name="keyword" placeholder="Search" />
+            <input
+                type="search"
+                name="keyword"
+                placeholder="Search"
+                autocomplete="off"
+                id="search-bar" />
         </form>
     </div>
     <!-- .search-bar /-->
@@ -59,7 +68,7 @@ $response = $this->response;
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="search-result">
             <?php foreach ($response as $user): ?>
                 <tr>
                     <td class="text-center">
@@ -98,7 +107,11 @@ $response = $this->response;
                             <?= clean_data($user->email) ?>
                         </a>
                     </td>
-                    <td><?= clean_data($user->website) ?></td>
+                    <td>
+                        <a href="<?= clean_data($user->website) ?>" target="__blank" class="dark-link">
+                            <?= clean_data($user->website) ?>
+                        </a>
+                    </td>
                     <td><?= clean_data($user->user_role) ?></td>
                     
                     <?php if(empty($user->active)): ?>
@@ -128,3 +141,25 @@ $response = $this->response;
     <!-- .table .table-100 .text-left .table-responsive /-->
 </section>
 <!-- .projects-panel /-->
+
+<div class="loader-container">
+    <div class="loader"></div>
+    <div class="loader"></div>
+</div>
+
+<script>
+    window.onload = () => {
+        const search_bar = $('#search-bar')
+
+        search_bar.addEventListener('keyup', (event) => {
+            let keyword = search_bar.value
+        
+            const ajax = Ajax(
+                'post',
+                '<?= WEB_ROOT ?>/admin/users/search',
+                '#search-result',
+                `keyword=${keyword}&async=true`
+            )
+        })
+    }
+</script>
