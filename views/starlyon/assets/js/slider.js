@@ -12,7 +12,7 @@ const slide = $$('.slide')
 const prev_btn = $('#prev')
 const next_btn = $('#next')
 
-const auto_slide = true;
+const auto_slide = false;
 const timeout = 8000;
 const transition = 'all 1s ease-in-out'
 

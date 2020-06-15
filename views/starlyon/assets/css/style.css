@@ -433,7 +433,6 @@ p{
 }
 .contact-btn:active,
 .pricing-btn:active,
-.services-btn:active,
 .services-btn:active{
     box-shadow: 0 0 0 .3rem rgba(255, 186, 102, 0.794);
 }
