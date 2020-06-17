@@ -19,6 +19,7 @@ const transition = 'all 1s ease-in-out'
 let counter = 1;
 const size = slide[0].clientWidth;
 
+
 slider.style.transform = `translateX(${-(size * counter)}px)`
 
 const next_slide = () => {

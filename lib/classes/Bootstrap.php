@@ -3,6 +3,7 @@ namespace portfolio;
 
 use controller\Home as Home;
 use controller\Admin;
+
 /**
  * Our Bootstrap Class.
  */
@@ -27,22 +28,19 @@ class Bootstrap
 				(new Home())->get();
 
 			// Store the file name.
-			$file_name = './controllers'. DIRECTORY_SEPARATOR . ucwords($this->url[0]) .".php";
-			
-			var_dump(!file_exists($file_name));
+			$file_name = 'controllers'. DIRECTORY_SEPARATOR .$this->url[0].".php";
 
 			// Check if the file exist.
 			if (!file_exists($file_name)) {
 				// Take user to 404 page.
-				// (new Home())->not_found();
+				(new Home())->not_found();
 
 			} else {
-				// Set the class name. 
-				$ct_name = ucwords($this->url[0]);
+				// Set the class name.
+				$ct_name = 'controller\\' .ucwords($this->url[0]);
 				
 				// Instantiate an Object.
 				$controller = new $ct_name();
-				// $controller = new Admin;
 
 				// Check if an action was mentioned.
 				if (empty($this->url[1])){
