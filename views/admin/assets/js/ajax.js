@@ -17,9 +17,30 @@ const Ajax = (
     let request = new XMLHttpRequest
 
     request.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            document.querySelector(element).innerHTML = this.responseText
+        if (this.readyState < 4) {
+            let search_box = document.querySelector(element)
+
+            const loader_container = document.createElement('div')
+            const first_bounce = document.createElement('div')
+            const last_bounce = document.createElement('div')
+
+            loader_container.className = 'loader-container'
+            first_bounce.classList.add('bounce')
+            first_bounce.classList.add('first-bounce')
+
+            last_bounce.classList.add('bounce')
+            last_bounce.classList.add('last-bounce')
+
+            loader_container.append(first_bounce)
+            loader_container.append(last_bounce)
+
+            search_box.innerHTML = ''
+            search_box.append(loader_container)
         }
+
+        // if (this.readyState === 4 && this.status === 200) {
+        //     document.querySelector(element).innerHTML = this.responseText
+        // }
     }
     
     switch (method.toLowerCase()) {

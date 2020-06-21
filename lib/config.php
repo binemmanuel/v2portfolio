@@ -17,7 +17,7 @@ session_name("id");
 session_start();
 
 /**
- * For developers: Dragon Programming Forum debugging mode.
+ * For developers: Bin Emmanuel debugging mode.
  *
  * Configure error reporting options
  * Change this to false to enable the display of notices during development.

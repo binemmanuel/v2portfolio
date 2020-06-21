@@ -1,0 +1,28 @@
+.loader-container{
+    width: 10rem;
+    height: 10rem;
+    position: relative;
+    margin: 100px auto;
+}
+.bounce{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    background: rgb(200 200 200);
+    opacity: 0.6;
+    animation: bounce 2.0s infinite ease;
+}
+.last-bounce{
+    animation-delay: -1.5s;
+}
+@keyframes bounce{
+    0%, 100%{
+        transform: scale(0.0);
+    }
+    50%{
+        transform: scale(1.0);
+    }
+}

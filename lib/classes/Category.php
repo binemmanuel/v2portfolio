@@ -60,7 +60,7 @@ class Category {
 	/**
 	 * Get a Category object matching the given Category ID.
 	 * 
-	 * @param int The Category ID.
+	 * @param Int The Category ID.
 	 * @return Category | false The Category object or false if the record was not found or there was a problem.
 	 */
 	public function get()
@@ -77,24 +77,28 @@ class Category {
 		// Bind parameter.
 		$stmt->bind_param('i', $this->id);
 
+		// Execute query.
+		$stmt->execute();
+		
 		$category = new Category();
 
-		// Execute query.
-		if ($stmt->execute() === true) {
-			// Bind result value.
-			$stmt->bind_result($id, $name, $slug, $description);
+		// Bind result value.
+		$stmt->bind_result(
+			$id,
+			$name,
+			$slug,
+			$description
+		);
 
-			// Retrieve rows.
-			if ($stmt->fetch() === true) {
-				// Return the data.
-				$category->id = $id ;
-				$category->name = $name ;
-				$category->slug = $slug ;
-				$category->description = $description ;
-			}
-				
+		// Retrieve rows.
+		if ($stmt->fetch()) {
+			// Return the data.
+			$category->id = $id ;
+			$category->name = $name ;
+			$category->slug = $slug ;
+			$category->description = $description ;
 		}
-		
+				
 		// Close Statement.
 		$stmt->close();
 
@@ -109,15 +113,13 @@ class Category {
 	 * Get all categories that a project belongs to..
 	 * 
 	 * @param Int The Projects ID.
-	 * @return Category The Category list of categories.
+	 * @return Array All categories associated to the Project.
 	 */
 	public function get_project_cat(int $project): array
 	{
 		// Instantiate a DB object.
 		$db = new Database();
 
-		// Check if the category object has an ID?.
-		
 		// Sanitize ID.
 		$project = clean_data($project);
 
@@ -165,13 +167,17 @@ class Category {
 	}
 
 	/**
-	 * Get all (or a rang of) Category objects in the database.
+	 * Get all (or a rang of) Categories.
 	 * 
-	 * @param int Optional The number if rows to return (return all by default).
-	 * @return string Optional column by which to order the categories (name by default in ASC order).
+	 * @param Int Number indicating where to start fetching from.
+	 * @param Int (Optional) The number of rows to return (returns all by default).
+	 * 
 	 * @return Array A list of all categories. 
 	 */	
-	public static function get_all(int $offset, int $numOfRows)
+	public static function get_all(
+		int $offset,
+		int $numOfRows = 0
+	): array
 	{
 		// Instantiate a DB object.
 		$db = new Database();
@@ -182,26 +188,52 @@ class Category {
 		}
 
 		// Prepare a Statement.
-		$stmt = $db->prepare('SELECT id, name, slug, description FROM me_category ORDER BY name ASC LIMIT ?, ?');
+		$stmt = $db->prepare(
+			'SELECT
+				id,
+				name,
+				slug,
+				description
+			FROM
+				me_category
+			ORDER BY
+				name ASC
+			LIMIT ?, ?'
+		);
 
 		// Bind Parameters.
-		$stmt->bind_param('ii', $offset, $numOfRows);
+		$stmt->bind_param(
+			'ii',
+			$offset,
+			$numOfRows
+		);
 
+		// Initialize an empty array.
 		$data = [];
 
 		// Execute Query.
-		if ($stmt->execute() === true) {
-			// Bind Result Value.
-			$stmt->bind_result($id, $name, $slug, $description);
+		$stmt->execute();
 
-			// Retrieve rows.
-			while ($stmt->fetch() === true) {
-				// Instantiate an Object.
-				$category = new Category($id, $name, $slug, $description);
+		// Bind Result Value.
+		$stmt->bind_result(
+			$id,
+			$name,
+			$slug,
+			$description
+		);
 
-				// Store an array of objects.
-				array_push($data, $category);
-			}
+		// Retrieve rows.
+		while ($stmt->fetch() === true) {
+			// Instantiate an Object.
+			$category = new Category(
+				$id,
+				$name,
+				$slug,
+				$description
+			);
+
+			// Store an array of objects.
+			array_push($data, $category);
 		}
 		
 		// Close Statement.
@@ -215,6 +247,8 @@ class Category {
 
 	/**
 	 *  Get the total number of rows.
+	 * 
+	 * @return Int The number of Categories.
 	 */
 	public static function count_rows(): int
 	{
@@ -222,18 +256,22 @@ class Category {
 		$db = new Database();
 
 		// Prepare a Statement.
-		$stmt = $db->prepare('SELECT COUNT(*) as totalRows FROM me_category');
+		$stmt = $db->prepare(
+			'SELECT
+				COUNT(*)
+			as
+				totalRows
+			FROM
+				me_category'
+		);
 
 		// Execute Query.
-		if ($stmt->execute() !== false) {
-			// Bind the result to a variable.
-			$stmt->bind_result($total_rows);
+		$stmt->execute();
 
-			if ($stmt->fetch() !== false) {
+		// Bind the result to a variable.
+		$stmt->bind_result($total_rows);
 
-				return $total_rows;
-			};
-		}
+		$stmt->fetch();
 
 		// Close Statement.
 		$stmt->close();
@@ -241,29 +279,44 @@ class Category {
 		// close dbection.
 		$db->close();
 
-		return 0;
+		return (int) $total_rows;
 	}
 
 	/**
 	 *	Saves a new Category.
 	 *	
-	 *	@return Bool false || true if the Category saved successfully.
+	 *	@return Int 0 || the ID of the inserted Category.
 	 */
-	public function save()
+	public function save(): int
 	{
 		// Instantiate a DB object.
 		$db = new Database();
 
 		if (empty($this->description)) {
 			// Prepare a Statement.
-			$stmt = $db->prepare('INSERT INTO me_category(name, slug) VALUES(?, ?)');
+			$stmt = $db->prepare(
+				'INSERT 
+					me_category(
+						name,
+						slug
+					)
+				VALUES(?, ?)'
+			);
 
 			// Bind Parameters.
 			$stmt->bind_param('ss', $this->name, $this->slug);
 
 		} else {
 			// Prepare a Statement.
-			$stmt = $db->prepare('INSERT INTO me_category(name, slug, description) VALUES(?, ?, ?)');
+			$stmt = $db->prepare(
+				'INSERT INTO
+					me_category(
+						name,
+						slug,
+						description
+					)
+				VALUES(?, ?, ?)'
+			);
 
 			// Bind Parameters.
 			$stmt->bind_param('sss', $this->name, $this->slug, $this->description);
@@ -285,7 +338,7 @@ class Category {
 		$db->close();
 
 		// Return false by default.
-		return $last_id;
+		return (int) $last_id;
 	}
 
 	/**
@@ -340,7 +393,7 @@ class Category {
 	 *	@var Int The category's ID. 
 	 *	@var Int The project's ID. 
 	 
-     *  @return false || true if the category already exists.
+     *  @return Bool false || true if the category already exists.
      */
 	public function is_project_added(
 		int $category,
@@ -389,9 +442,9 @@ class Category {
 	}
 	
 	/**
-	 *	Delete the current Category object in the database.
+	 *	Deletes a project.
 	 *	
-	 *	@return false | true if the Category object was deleted from the database successfully.
+	 *	@return Bool false || true if deleted successfully.
 	 */
 	public function remove_project(
 		array $cat_ids,

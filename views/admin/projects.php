@@ -58,7 +58,7 @@ $count = $this->response->counts;
         <thead>
             <tr>
                 <th class="text-center">
-                    <input type="checkbox" name="">
+                    <input type="checkbox" class="checkall">
                 </th>
                 <th>Title</th>
                 <th>Author</th>
@@ -71,7 +71,7 @@ $count = $this->response->counts;
             <?php foreach ($projects as $project): ?>
                 <tr>
                     <td class="text-center">
-                        <input type="checkbox" name="" />
+                        <input type="checkbox" name="" class="select" />
                     </td>
                     <td class="clear">
                         <a href="<?= WEB_ROOT ?>admin/projects/edit/<?= $project->id ?>" class="dark-link"><?= $project->title ?></a>
@@ -102,7 +102,7 @@ $count = $this->response->counts;
         <tfoot>
             <tr>
                 <th class="text-center">
-                    <input type="checkbox" name="">
+                    <input type="checkbox" class="checkall">
                 </th>
                 <th>Title</th>
                 <th>Author</th>

@@ -174,8 +174,6 @@ side_nav_item.forEach(side_nav_item =>{
     }
 })
 
-
-
 let close_btns = $$('.close-btn')
 if (close_btns !== null) {
     close_btns.forEach(close_btn => {
@@ -196,6 +194,59 @@ if (close_btns !== null) {
         })
     }, false);
 }
+
+/* Check All */
+let check_all = document.querySelectorAll('.checkall')
+
+check_all.forEach(checkbox => {
+    checkbox.addEventListener('click', () => {
+        let all_check_boxs = document.querySelectorAll('.select')
+        
+        all_check_boxs.forEach(all_check_box => {
+            console.log(all_check_box);
+            
+            if (all_check_box.getAttribute('checked') === null) {
+                all_check_box.setAttribute('checked', '')
+            } else {
+                all_check_box.removeAttribute('checked')
+            }
+        });
+        check_all.forEach(checkbox => {
+            if (checkbox.getAttribute('checked') === null) {
+                checkbox.setAttribute('checked', '')
+            } else {
+                checkbox.removeAttribute('checked')
+            }
+            
+        })
+    })
+});
+
+
+async function search(
+    url,
+    data = {}
+) {
+    const response = await fetch(url, {
+        method: 'POST',
+        catch: 'no-catch',
+        credentials: 'same-origin',
+        header: {
+            'Content-Type': 'application/json',
+
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(data)
+    })
+
+    return response.json()
+}  
+
+// search('<?= WEB_ROOT ?>admin/users/search', {
+//     answer: 200
+// })
+// .then(data => console.log(data))
 
 
 if(performance.navigation.type == 2)

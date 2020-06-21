@@ -30,25 +30,28 @@ class Bootstrap
 			// Store the file name.
 			$file_name = 'controllers'. DIRECTORY_SEPARATOR .$this->url[0].".php";
 
+			// Set the class name.
+			$ct_name = 'controller\\' .ucwords($this->url[0]);
+				
+			// Instantiate an Object.
+			$controller = new $ct_name();
+
 			// Check if the file exist.
 			if (!file_exists($file_name)) {
 				// Take user to 404 page.
 				(new Home())->not_found();
 
-			} else {
-				// Set the class name.
-				$ct_name = 'controller\\' .ucwords($this->url[0]);
-				
-				// Instantiate an Object.
-				$controller = new $ct_name();
-
+			} elseif (
+				strtolower($this->url[0]) !== 'login' &&
+				strtolower($this->url[0]) !== 'signup'
+			) {
 				// Check if an action was mentioned.
 				if (empty($this->url[1])){
 					// Get data.
 					$controller->get();
 
 				} else {
-					// // Sanitize data.
+					// Sanitize data.
 					$action = clean_data($this->url[1]);
 					$param = (!empty($this->url[2])) ? clean_data($this->url[2]) : null;
 					$id = (!empty($this->url[3])) ? clean_data($this->url[3]) : null;
@@ -65,7 +68,10 @@ class Bootstrap
 						$controller->not_found();
 					}
 				}
-
+			} else {
+				// Sanitize data.
+				// $action = (string) clean_data($this->url[1]);
+				// $param = (!empty($this->url[1])) ? clean_data($this->url[1]) : null;
 			}
 
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 11, 2020 at 11:01 AM
+-- Generation Time: Jun 18, 2020 at 02:32 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.5
 
@@ -158,12 +158,13 @@ CREATE TABLE `me_project` (
 --
 
 INSERT INTO `me_project` (`id`, `author`, `title`, `content`, `summary`, `featured_image`, `status`, `comment_status`, `comment_count`, `posted_on`) VALUES
-(72, 'Bin Emmanuel', 'About Me', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, magnam sit temporibus quos doloribus maxime in qui totam? Quibusdam voluptatem, ipsa eos, dignissimos expedita quasi nobis dolorum debitis tempora, doloribus possimus perspiciatis adipisci asperiores hic ad nisi! Ad atque aspernatur deleniti error dolores quasi omnis accusantium quibusdam dignissimos hic odio, illum maxime recusandae est mollitia magnam distinctio ullam? Provident dicta accusamus aperiam architecto veritatis aliquid veniam sed exercitationem quasi a perferendis tenetur laborum, quas reiciendis porro et recusandae, dignissimos debitis rem! Eum, mollitia, et voluptatem sunt autem excepturi officiis similique harum atque, dolorem doloribus laudantium vero fugit. Earum, quisquam laudantium?', NULL, 'http://localhost/portfolio/uploads\\images\\[binemmanul.com]_172c939664132b5ba80132aa6fabae1d.png', 'published', 'close', 0, '2020-05-31 14:35:11'),
-(73, 'Bin Emmanuel', 'The project title', 'The project title', NULL, 'http://localhost/portfolio/views/starlyon/assets/img/BIn%20Emmanuel.jpg', 'published', 'open', 0, '2020-05-31 15:55:06'),
-(83, 'Bin Emmanuel', 'New project in 2020', 'Some thing bout the project goes here.\r\nThis project was edited', NULL, 'http://localhost/portfolio/uploads\\images\\[binemmanul.com]_11c6828d3fc0cfbe908272f28fbe80d8.gif', 'published', 'close', 0, '2020-05-31 19:09:56'),
+(72, 'Bin Emmanuel', 'About Me', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, magnam sit temporibus quos doloribus maxime in qui totam? Quibusdam voluptatem, ipsa eos, dignissimos expedita quasi nobis dolorum debitis tempora, doloribus possimus perspiciatis adipisci asperiores hic ad nisi! Ad atque aspernatur deleniti error dolores quasi omnis accusantium quibusdam dignissimos hic odio, illum maxime recusandae est mollitia magnam distinctio ullam? Provident dicta accusamus aperiam architecto veritatis aliquid veniam sed exercitationem quasi a perferendis tenetur laborum, quas reiciendis porro et recusandae, dignissimos debitis rem! Eum, mollitia, et voluptatem sunt autem excepturi officiis similique harum atque, dolorem doloribus laudantium vero fugit. Earum, quisquam laudantium?', NULL, 'http://localhost/portfolio/uploads\\images\\[binemmanul.com]_bd32d16d2dd61d5454b73724277b15ef.png', 'trash', 'close', 0, '2020-05-31 14:35:11'),
+(73, 'Bin Emmanuel', 'The project title', 'The project title', NULL, 'http://localhost/portfolio/views/starlyon/assets/img/BIn%20Emmanuel.jpg', 'trash', 'open', 0, '2020-05-31 15:55:06'),
+(83, 'Bin Emmanuel', 'New project in 2020', 'Some thing bout the project goes here.\r\nThis project was edited', NULL, 'http://localhost/portfolio/uploads\\images\\[binemmanul.com]_0eeeb996e92a8809f0009055b7bffadd.jpg', 'trash', 'close', 0, '2020-05-31 19:09:56'),
 (84, 'Bin Emmanuel', 'New project in 2020', 'Some thing bout the project goes here.', NULL, 'http://localhost/portfolio/views/starlyon/assets/img/BIn%20Emmanuel.jpg', 'published', 'close', 0, '2020-05-31 19:10:31'),
-(85, 'Bin Emmanuel', 'Me and Future Project', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, magnam sit temporibus quos doloribus maxime in qui totam? Quibusdam voluptatem, ipsa eos, dignissimos expedita quasi nobis dolorum debitis tempora, doloribus possimus perspiciatis adipisci asperiores hic ad nisi', NULL, 'http://localhost/portfolio/uploads\\images\\[binemmanul.com]_172c939664132b5ba80132aa6fabae1d.png', 'published', 'close', 0, '2020-05-31 19:37:10'),
-(92, 'Bin Emmanuel', 'My new project for 90', 'You have been hacked', NULL, 'http://localhost/portfolio/uploads/images/[binemmanul.com]_11c6828d3fc0cfbe908272f28fbe80d8.gif', 'published', 'close', 0, '2020-06-01 12:38:01');
+(85, 'Bin Emmanuel', 'Me and Future Project', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor, magnam sit temporibus quos doloribus maxime in qui totam? Quibusdam voluptatem, ipsa eos, dignissimos expedita quasi nobis dolorum debitis tempora, doloribus possimus perspiciatis adipisci asperiores hic ad nisi', NULL, 'http://localhost/portfolio/uploads\\images\\[binemmanul.com]_bd32d16d2dd61d5454b73724277b15ef.png', 'trash', 'close', 0, '2020-05-31 19:37:10'),
+(93, 'Bin Emmanuel', 'Learning HTML and CSS', 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quos nihil dignissimos odit. Pariatur sunt corporis temporibus ea veniam? Magni qui perferendis est omnis. Natus reiciendis maiores eveniet tempora facere!\r\nLorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quos nihil dignissimos odit. Pariatur sunt corporis temporibus ea veniam? Magni qui perferendis est omnis. Natus reiciendis maiores eveniet tempora facere!\r\nLorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quos nihil dignissimos odit. Pariatur sunt corporis temporibus ea veniam? Magni qui perferendis est omnis. Natus reiciendis maiores eveniet tempora facere!\r\nLorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quos nihil dignissimos odit. Pariatur sunt corporis temporibus ea veniam? Magni qui perferendis est omnis. Natus reiciendis maiores eveniet tempora facere!\r\nLorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quos nihil dignissimos odit. Pariatur sunt corporis temporibus ea veniam? Magni qui perferendis est omnis. Natus reiciendis maiores eveniet tempora facere!\r\nLorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quos nihil dignissimos odit. Pariatur sunt corporis temporibus ea veniam? Magni qui perferendis est omnis. Natus reiciendis maiores eveniet tempora facere!\r\nLorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quos nihil dignissimos odit. Pariatur sunt corporis temporibus ea veniam? Magni qui perferendis est omnis. Natus reiciendis maiores eveniet tempora facere!\r\nLorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quos nihil dignissimos odit. Pariatur sunt corporis temporibus ea veniam? Magni qui perferendis est omnis. Natus reiciendis maiores eveniet tempora facere!', NULL, 'http://localhost/portfolio/uploads\\images\\[binemmanul.com]_bd32d16d2dd61d5454b73724277b15ef.png', 'published', 'close', 0, '2020-06-18 12:04:37'),
+(92, 'Bin Emmanuel', 'My new project for 90', 'You have been hacked', NULL, 'http://localhost/portfolio/uploads\\images\\[binemmanul.com]_bd32d16d2dd61d5454b73724277b15ef.png', 'trash', 'open', 0, '2020-06-01 12:38:01');
 
 -- --------------------------------------------------------
 
@@ -184,11 +185,14 @@ CREATE TABLE `me_project_category` (
 INSERT INTO `me_project_category` (`id`, `category`, `project`) VALUES
 (8, 41, 72),
 (12, 40, 72),
-(16, 42, 84),
-(30, 50, 92),
-(31, 39, 92),
-(43, 42, 83),
-(46, 47, 85);
+(46, 47, 85),
+(47, 47, 83),
+(48, 48, 85),
+(49, 43, 85),
+(50, 48, 83),
+(60, 42, 84),
+(62, 39, 92),
+(63, 42, 93);
 
 -- --------------------------------------------------------
 
@@ -397,13 +401,13 @@ ALTER TABLE `me_library`
 -- AUTO_INCREMENT for table `me_project`
 --
 ALTER TABLE `me_project`
-  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `me_project_category`
 --
 ALTER TABLE `me_project_category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `me_site_info`

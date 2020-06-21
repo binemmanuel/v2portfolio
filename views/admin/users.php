@@ -142,11 +142,6 @@ $count = $this->response->counts;
 </section>
 <!-- .projects-panel /-->
 
-<div class="loader-container">
-    <div class="loader"></div>
-    <div class="loader"></div>
-</div>
-
 <script>
     window.onload = () => {
         const search_bar = $('#search-bar')
@@ -161,5 +156,13 @@ $count = $this->response->counts;
                 `keyword=${keyword}&async=true`
             )
         })
+
+        // fetch('<?= WEB_ROOT ?>/admin/users/search')
+        // .then(response => {
+        //     console.log(response)
+        // })
+        // .then(data => console.log(data))
+
+        
     }
 </script>

@@ -133,7 +133,7 @@ class SiteInfo extends BaseModel
             $response->filled_data ->allow_new_reg = $data['allow_new_reg'];
 
         } else {
-            // Instantate a Site Info object.
+            // Instantiate a Site Info object.
             $info = new PortfolioSiteInfo;
 
             // Set data.

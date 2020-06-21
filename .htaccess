@@ -3,32 +3,3 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-l
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
-
-# Rewrite /foo/bar to /foo/bar.php
-RewriteRule ^([^.?]+)$ %{REQUEST_URI}.php [L]
-
-# Return 404 if original request is /foo/bar.php
-RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$"
-# RewriteRule .* - [L,R=404]
-RewriteRule .* - [L,R=views\404.php]
-
-# Return 404 if original request is /foo/bar.php
-RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.html[? ].*$"
-# RewriteRule .* - [L,R=404]
-RewriteRule .* - [L,R=views\404.php]
-
-
-# NOTE! FOR APACHE ON WINDOWS: Add [NC] to RewriteCond like this:
-# RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.php[? ].*$" [NC]
-
-# NOTE! FOR APACHE ON WINDOWS: Add [NC] to RewriteCond like this:
-# RewriteCond %{THE_REQUEST} "^[^ ]* .*?\.html[? ].*$" [NC]
-
-
-
-# Redirect non-existing pages to index.php
-# Options +SymLinksIfOwnerMatch 
-# RewriteEngine On 
-# RewriteCond %{REQUEST_FILENAME} !-f 
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule . /index.php [L]

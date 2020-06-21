@@ -30,7 +30,7 @@ class Admin extends BaseController
     public function get(): void
     {
         $this->view->render('/', $this->admin_template);
-	}
+    }
     
     /** 
      * This method is responsibe for handling all
@@ -423,8 +423,10 @@ class Admin extends BaseController
                 // Instantiate an object.
                 $model = new SiteInfo;
 
-                // Update Site Info.
-                $this->view->update_response = $model->update($_POST);
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    // Update Site Info.
+                    $this->view->update_response = $model->update($_POST);
+                }
 
                 break;
         }

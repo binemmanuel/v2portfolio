@@ -90,7 +90,7 @@ if (!empty($this->form_response)) {
                 <img
                     src="<?= WEB_ROOT . urldecode($media->link) ?>"
                     alt="<?= $media->alt_text ?>"
-                    onclick="copy_url('<?= WEB_ROOT ?>', '#link-'+ <?= $media->id ?>)"/>
+                    onclick="copy_url('<?= WEB_ROOT ?>', '#link-<?= $media->id ?>')"/>
 
                 <!-- .media-actions -->
                 <div class="media-actions">
@@ -119,8 +119,8 @@ if (!empty($this->form_response)) {
                         <li class="btn btn-body btn-danger"
                             id="activate_delete_modal"
                             onclick="delete_media_modal(
-                                '#id-'+ <?= $media->id ?>,
-                                '#link-'+ <?= $media->id ?>,
+                                '#id-<?= $media->id ?>',
+                                '#link-<?= $media->id ?>',
                                 delete_modal_form
                             )">
                             <a>Delete</a>
@@ -140,7 +140,7 @@ if (!empty($this->form_response)) {
                 
                 <video 
                     src="<?= WEB_ROOT . urldecode($media->link) ?>"
-                    onclick="copy_url('<?= WEB_ROOT ?>', '#link-'+ <?= $media->id ?>)"></video>
+                    onclick="copy_url('<?= WEB_ROOT ?>', '#link-<?= $media->id ?>')"></video>
 
                 <!-- .media-actions -->
                 <div class="media-actions">
@@ -169,8 +169,8 @@ if (!empty($this->form_response)) {
                         <li class="btn btn-body btn-danger"
                             id="activate_delete_modal"
                             onclick="delete_media_modal(
-                                '#id-'+ <?= $media->id ?>,
-                                '#link-'+ <?= $media->id ?>,
+                                '#id-<?= $media->id ?>',
+                                '#link-<?= $media->id ?>',
                                 delete_modal_form
                             )">
                             <a>Delete</a>

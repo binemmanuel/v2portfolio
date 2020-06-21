@@ -14,14 +14,12 @@ class Home extends BaseController
 		$this->info = $this->info->fetch();
     }
 
-    public function get()
+    public function get():void
     {
-		
-
 		$this->view->render('/', $this->info->template);
     }
 
-    public function not_found()
+    public function not_found(): void
     {
 		$this->view->render('404');
     }

@@ -23,13 +23,13 @@ $site_info = (object) $site_info->fetch();
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin | <?= $site_info->title ?></title>
 
-        <link rel="shortcut icon" type="image/png" href="<?= WEB_ROOT ?>assets\img\logo.PNG" />
+        <link rel="shortcut icon" href="<?= WEB_ROOT ?>assets\img\logo.png" />
 
         <!-- Custom CSS -->
         <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\style.css" />
 
-        <!-- Loader CSS -->
-        <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\loader.css" type="text/css" />
+        <!-- Loader -->
+        <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\assets\css\loader.css" />
         
         <!-- Font awesome -->
         <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\assets\css\font-awesome.min.css" />
@@ -46,17 +46,17 @@ $site_info = (object) $site_info->fetch();
                 <div class="flexbox">
                     <ul class="nav-list">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" >
+                            <a href="<?= WEB_ROOT ?>admin/chat" class="nav-link" >
                                 <i class="fa fa-comments"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link" >
+                            <a href="<?= WEB_ROOT ?>admin/projects/add-new" class="nav-link" >
                                 <i class="fa fa-plus"></i>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link" >
+                            <a href="<?= WEB_ROOT ?>admin/projects/settings" class="nav-link" >
                                 <i class="fa fa-cogs"></i>
                             </a>
                         </li>

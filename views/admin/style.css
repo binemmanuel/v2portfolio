@@ -15,47 +15,6 @@ This theme, like binemmanuel, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned
 with others.
 */
-
-.loader-container{
-    position: relative;
-    width: 20%;
-    margin: 0 auto;
-}
-.loader{
-    position: absolute;
-    top: 0;
-    background: transparent;
-    border: .3rem solid var(--main-color);
-    border-top-color: transparent;
-    border-radius: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* left: 50%; */
-}
-.loader:nth-child(1) {
-    height: 9rem;
-    width: 9rem;
-    /* animation: loader 2s linear infinite; */
-}
-.loader:nth-child(2) {
-    margin-top: 1rem;
-    height: 7rem;
-    width: 7rem;
-    /* animation: loader 1s linear infinite; */
-}
-.loader:first-child{
-    margin: initial;
-}
-
-@keyframes loader{
-    from{
-        transform: rotate(0);
-    }
-    to{
-        transform: rotate(360deg);
-    }
-}
 /* Global Style */
 *,
 *::before,
@@ -242,7 +201,7 @@ pre{
     outline: none;
 }
 .edit-modal-body .edit-modal-file-detail textarea{
-    height: 9rem;
+    height: 6rem;
 }
 .edit-modal-actions{
     padding: 1rem
@@ -892,7 +851,7 @@ pre{
     position: absolute;
     top: 0;
     transform: translateY(0);
-    background: rgb(241 241 241 / 72%);
+    background: rgb(63 63 63 / 52%);
     border-top: .2rem solid;
     width: 100%;
     display: flex;
