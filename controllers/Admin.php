@@ -8,9 +8,11 @@ use model\Tag;
 use model\User;
 use model\SiteInfo;
 use portfolio\BaseController;
+use portfolio\LoginToken;
 use portfolio\Project as PortfolioProject;
 
 use function portfolio\clean_data;
+use function portfolio\is_logged_in;
 
 class Admin extends BaseController
 {
@@ -25,6 +27,13 @@ class Admin extends BaseController
             $this->info->admin_template = 'admin';
         }
         $this->admin_template = $this->info->admin_template;
+
+        $login_token = new LoginToken;
+
+        if (!is_logged_in() || !$login_token->is_valid($_COOKIE['login-token'])) {
+            header('Location: '. WEB_ROOT . 'login/');
+            exit;
+        }
     }
 
     public function get(): void

@@ -2,7 +2,7 @@
 namespace portfolio;
 
 use controller\Home as Home;
-use controller\Admin;
+use controller\adminin;
 
 /**
  * Our Bootstrap Class.
@@ -32,7 +32,7 @@ class Bootstrap
 
 			// Set the class name.
 			$ct_name = 'controller\\' .ucwords($this->url[0]);
-				
+			
 			// Instantiate an Object.
 			$controller = new $ct_name();
 
@@ -69,9 +69,15 @@ class Bootstrap
 					}
 				}
 			} else {
-				// Sanitize data.
-				// $action = (string) clean_data($this->url[1]);
-				// $param = (!empty($this->url[1])) ? clean_data($this->url[1]) : null;
+				if (empty($this->url[1])) {
+					$action = $this->url[0];
+					
+					$controller->$action();
+				} else {
+					$action = clean_data($this->url[1]);
+					// Perform an action.
+					$controller->$action();
+				}
 			}
 
 

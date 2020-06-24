@@ -37,6 +37,47 @@ function validate_role(string $role)
 /**
  * Validate user role.
  * 
+ * @return Array All valid user roles.
+ */
+function valid_roles(): array
+{
+    // Create an array of roles.
+    return $valid_roles = [
+        'administrator',
+        'subscriber'
+    ];
+}
+
+function get_ip(): string
+{
+    // Check if IP is from shared internet.
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = clean_data($_SERVER['HTTP_CLIENT_IP']);
+
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = clean_data($_SERVER['HTTP_X_FORWARDED_FOR']);
+
+    } else {
+        $ip = clean_data($_SERVER['REMOTE_ADDR']);
+        
+    } 
+
+    return $ip;
+}
+
+function is_logged_in()
+{
+    // Check if cookie is set.
+    if (!empty($_COOKIE['login-token'])) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Validate user role.
+ * 
  * @return Bool true || false if the user role is not valid.
  */
 function validate_acc_status(string $status)

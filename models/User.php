@@ -2,11 +2,13 @@
 namespace model;
 
 use portfolio\BaseModel;
+use portfolio\LoginToken;
 use portfolio\User as PortfolioUser;
 use portfolio\UserInfo;
 use stdClass;
 
 use function portfolio\clean_data;
+use function portfolio\get_ip;
 use function portfolio\validate_acc_status;
 use function portfolio\validate_role;
 
@@ -77,16 +79,212 @@ class User extends BaseModel
         return $this->response;
     }
 
+    /**
+     * Process user signup form data.
+     * 
+     * @param Array The user's data.
+     * @return Object A response.
+     */
+    public function login(array $data): object
+    {
+        if (empty($data['username'])) {
+            $this->response->error = true;
+            $this->response->message = 'Please enter your username.';
+            $this->response->type = 'username';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = clean_data($data['username']);
+
+        } elseif (empty($data['password'])) {
+            $this->response->error = true;
+            $this->response->message = 'Please enter a password.';
+            $this->response->type = 'password';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = clean_data($data['username']);
+
+        } elseif (!$this->user::is_active(clean_data($data['username']))) {
+            $this->response->error = true;
+            $this->response->message = 'Sorry! Your account is inactive,';
+            $this->response->message .= ' please contect an <a class="alert-link" href="mailto:textme@binemmanuel.com">admin</a> to activate your account.';
+            $this->response->type = 'account status';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = clean_data($data['username']);
+        } else {
+            $user_id = $this->user::verify_pass(
+                clean_data($data['username']),
+                clean_data($data['password'])
+            );
+            
+            if (!$user_id) {
+                $this->response->error = true;
+                $this->response->message = 'Incorrect username or password.';
+                $this->response->type = 'username and password';
+
+                $this->response->filled_data = new stdClass;
+
+                $this->response->filled_data->username = clean_data($data['username']);
+            } else {
+                // Generate Login token.
+                $login_token = new LoginToken(
+                    bin2hex(random_bytes(10)),
+                    $user_id,
+                    get_ip()
+                );
+
+                // Delete prev login token.
+                $login_token->delete($user_id);
+                
+                // Save token.
+                if ($login_token->save()) {
+                    \setcookie(
+                        'login-token',
+                        $login_token->get_token(),
+                        time() + 1440,
+                        '/'
+                    );
+
+                    $this->response->error = false;
+                    $this->response->message = 'Logedin Successfully.';
+                    $this->response->type = '';
+
+                    header('Location: '. WEB_ROOT . 'admin/');
+                    exit;
+                }
+            }
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Process user signup form data.
+     * 
+     * @param Array The user's data.
+     * @return Object A response.
+     */
+    public function signup(array $data): object
+    {
+        if (empty($data['username'])) {
+            $this->response->error = true;
+            $this->response->message = 'Please enter your username.';
+            $this->response->type = 'username';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+        
+        } elseif ($this->user->exist(clean_data($data['username']))) {
+            $this->response->error = true;
+            $this->response->message = 'The user name you entered already exists.';
+            $this->response->type = 'username';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+        } elseif (empty($data['email'])) {
+            $this->response->error = true;
+            $this->response->message = 'Please enter your email address.';
+            $this->response->type = 'email';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+
+        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+            $this->response->error = true;
+            $this->response->message = 'Please enter a valid email address.';
+            $this->response->type = 'email';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+
+        } elseif (empty($data['password'])) {
+            $this->response->error = true;
+            $this->response->message = 'Please enter a password.';
+            $this->response->type = 'password';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+
+        } elseif (strlen($data['password']) < 6) {
+            $this->response->error = true;
+            $this->response->message = 'Password too short.';
+            $this->response->message .= ' Enter at least 6 or more characters.';
+            $this->response->type = 'password';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+            
+        } elseif (empty($data['confirm-password'])) {
+            $this->response->error = true;
+            $this->response->message = 'Please conform your password.';
+            $this->response->type = 'confirm-password';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+            
+        } elseif ($data['confirm-password'] !== $data['password']) {
+            $this->response->error = true;
+            $this->response->message = 'Sorry! The retyped password doesn\'t match';
+            $this->response->message .= ' your password';
+            $this->response->type = 'confirm-password';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+            
+        } else {
+            $user = $this->user;
+            
+            // Set data.
+            $user->set_username(clean_data($data['username']));
+            $user->set_email(clean_data($data['email']));
+            $user->set_user_role(clean_data($data['user-role']));
+            $user->set_password(\password_hash($data['password'], PASSWORD_DEFAULT));
+            
+            if ($user->create_account()) {
+                $this->response->error = false;
+                $this->response->message = 'Signup Successfully.';
+                $this->response->type = '';
+            }
+        }
+
+        return $this->response;
+    }
+
     public function update(array $data): object
     {
-        $response = new stdClass;
-    
         // validate email
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            $response->error = true;
-            $response->message = 'Invalid email address.';
-            $response->type = 'email';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'Invalid email address.';
+            $this->response->type = 'email';
+            $this->response->filled_data = [
                 'id' => $data['id'],
                 'first_name' => $data['first-name'],
                 'last_name' => $data['last-name'], 
@@ -99,10 +297,10 @@ class User extends BaseModel
             !empty($data['website']) &&
             !filter_var($data['website'], FILTER_VALIDATE_URL)
         ) {
-            $response->error = true;
-            $response->message = 'Invalid web address.';
-            $response->type = 'website';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'Invalid web address.';
+            $this->response->type = 'website';
+            $this->response->filled_data = [
                 'id' => $data['id'],
                 'first_name' => $data['first-name'],
                 'last_name' => $data['last-name'], 
@@ -115,10 +313,10 @@ class User extends BaseModel
             !empty($data['user_role']) &&
             !validate_role($data['user_role'])
         ) {
-            $response->error = true;
-            $response->message = 'Invalid user role.';
-            $response->type = 'user-role';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'Invalid user role.';
+            $this->response->type = 'user-role';
+            $this->response->filled_data = [
                 'id' => $data['id'],
                 'first_name' => $data['first-name'],
                 'last_name' => $data['last-name'], 
@@ -131,10 +329,10 @@ class User extends BaseModel
             !is_numeric($data['status']) ||
             !validate_acc_status($data['status'])
         ) {
-            $response->error = true;
-            $response->message = 'Invalid account status.';
-            $response->type = 'user-role';
-            $response->filled_data = [
+            $this->response->error = true;
+            $this->response->message = 'Invalid account status.';
+            $this->response->type = 'user-role';
+            $this->response->filled_data = [
                 'id' => $data['id'],
                 'first_name' => $data['first-name'],
                 'last_name' => $data['last-name'], 
@@ -174,10 +372,10 @@ class User extends BaseModel
 
             if ($user_info->has_data()) {
                 if ($user_info->update() && $this->user->update()) {
-                    $response->error = false;
-                    $response->message = 'Updated Successfully.';
-                    $response->type = '';
-                    $response->filled_data = [
+                    $this->response->error = false;
+                    $this->response->message = 'Updated Successfully.';
+                    $this->response->type = '';
+                    $this->response->filled_data = [
                         'id' => $data['id'],
                         'first_name' => $data['first-name'],
                         'last_name' => $data['last-name'], 
@@ -190,10 +388,10 @@ class User extends BaseModel
                 };
             } else {
                 if ($user_info->save() && $this->user->update()) {
-                    $response->error = false;
-                    $response->message = 'Updated Successfully.';
-                    $response->type = '';
-                    $response->filled_data = [
+                    $this->response->error = false;
+                    $this->response->message = 'Updated Successfully.';
+                    $this->response->type = '';
+                    $this->response->filled_data = [
                         'id' => $data['id'],
                         'first_name' => $data['first-name'],
                         'last_name' => $data['last-name'], 
@@ -207,6 +405,6 @@ class User extends BaseModel
             }
         }
 
-        return $response;
+        return $this->response;
     }
 }

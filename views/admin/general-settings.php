@@ -40,7 +40,7 @@ if (!empty($this->update_response)) {
         <?php elseif (!empty($update_response->message)): ?>
             <p class="alert alert-success"> <?= $update_response->message ?></p>
 
-Psite        <?php endif ?>
+        <?php endif ?>
 
         <form method="post"
             <?php if (empty($update_response)): ?>

@@ -16,11 +16,11 @@ class Home extends BaseController
 
     public function get():void
     {
-		$this->view->render('/', $this->info->template);
+		  $this->view->render('/', $this->info->template);
     }
 
     public function not_found(): void
     {
-		$this->view->render('404');
+		  $this->view->render('404');
     }
 }

@@ -20,13 +20,26 @@ class Signup extends BaseController
         }
 
 		$this->model = new User;
+	}
+	
+	public function signup()
+	{
+		$this->view->response = null;
+		$this->view->render('signup', $this->info->admin_template);
+	}
 
-        // Instantiate a SiteInfo Model Object.
-        $model = (new $this->model);
+	public function auth()
+	{
+		// Instantiate a User Model Object.
+		$model = ($this->model);
+		
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			// process for data.
+			$this->view->response = $model->signup($_POST);
+		}
 
-        $this->view->render('signup', $this->info->admin_template);
-    }
-
+		$this->view->render('signup', $this->info->admin_template);
+	}
 
     public function not_found()
     {

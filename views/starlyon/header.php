@@ -36,7 +36,7 @@ $site_info = (object) $site_info->fetch();
 
         <meta name=”robots” content="index, follow" />
 
-        <link rel="shortcut icon" type="image/png" href="assets\img\logo.PNG" />
+        <link rel="shortcut icon" href="<?= WEB_ROOT ?>views\starlyon\assets\img\logo.png" />
 
         <!-- Font awesome -->
         <link rel="stylesheet" href="<?= CSS_PATH ?>font-awesome.min.css" />

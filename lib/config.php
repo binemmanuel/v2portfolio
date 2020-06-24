@@ -12,21 +12,17 @@
 
 use portfolio\SiteInfo;
 
-// Initialize session.
-session_name("id");
-session_start();
-
 /**
  * For developers: Bin Emmanuel debugging mode.
  *
  * Configure error reporting options
  * Change this to false to enable the display of notices during development.
  */
-define('IS_ENV_PRODUCTION', true);
+define('IS_ENV_PRODUCTION', false);
 
 // Turn on error reporting
 error_reporting(E_ALL | E_STRICT);
-ini_set('display_errors', IS_ENV_PRODUCTION);
+ini_set('display_errors', !IS_ENV_PRODUCTION);
 
 // Set error log.
 ini_set('error_log', 'log/php-error.txt');
@@ -62,9 +58,9 @@ $site_info = (object) $site_info->fetch();
 
 // Set web root based on enviroment.
 if (IS_ENV_PRODUCTION) {
-    define('WEB_ROOT', 'http://localhost/portfolio/');
-} else {
     define('WEB_ROOT', $site_info->site_address . DIRECTORY_SEPARATOR);
+} else {
+    define('WEB_ROOT', 'http://localhost/portfolio/');
 }
 define('CSS_PATH', WEB_ROOT ."views/$site_info->template/assets/css/");
 define('JS_PATH', WEB_ROOT ."views/$site_info->template/assets/js/");

@@ -22,10 +22,25 @@ class Login extends BaseController
 		$this->model = new User;
 
         // Instantiate a SiteInfo Model Object.
-        $model = (new $this->model);
+		$model = (new $this->model);
+	}
+	
+	public function login()
+	{
+		$this->view->render('login', $this->info->admin_template);
+	}
 
-        $this->view->render('login', $this->info->admin_template);
-    }
+	public function auth()
+	{
+		// Instantiate a User Model Object.
+		$model = ($this->model);
+		
+		if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+			// process for data.
+			$this->view->response = $model->login($_POST);
+		}
+		$this->view->render('login', $this->info->admin_template);
+	}
 
 
     public function not_found()

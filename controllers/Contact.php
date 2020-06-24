@@ -25,7 +25,7 @@ class Contact extends BaseController
             $this->view->render('404');
             
         } else {
-            $model = (new $this->model);
+            $model = ($this->model);
             $response = $model->send($_POST);
 
             $_SESSION['response'] = (!empty($response)) ? $response : [

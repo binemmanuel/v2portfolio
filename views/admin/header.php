@@ -23,10 +23,10 @@ $site_info = (object) $site_info->fetch();
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin | <?= $site_info->title ?></title>
 
-        <link rel="shortcut icon" href="<?= WEB_ROOT ?>assets\img\logo.png" />
+        <link rel="shortcut icon" href="<?= WEB_ROOT ?>views\starlyon\assets\img\logo.png" />
 
         <!-- Custom CSS -->
-        <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\style.css" />
+        <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\assets\css\style.css" />
 
         <!-- Loader -->
         <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\assets\css\loader.css" />

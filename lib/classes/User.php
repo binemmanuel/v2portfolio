@@ -12,72 +12,72 @@ class User{
     // Properties.
 
     /**
-     *  @var int The User's ID from the database.
+     *  @var Int The User's ID from the database.
      */
     private $id;
 
     /**
-     *  @var string The User's username.
+     *  @var String The User's username.
      */
     private $username;
 
     /**
-     *  @var string The User's password.
+     *  @var String The User's password.
      */
     private $password;
 
     /**
-     *  @var string The User's email.
+     *  @var String The User's email.
      */
     private $email;
 
     /**
-     *  @var string The User's user role.
+     *  @var String The User's user role.
      */
     private $user_role;
 
     /**
-     *  @var int Account status.
+     *  @var Int Account status.
      */
     private $active;
 
     /**
-     *  @var string Account activation token.
+     *  @var String Account activation token.
      */
     private $token;
 
     /**
-     *  @var string Reset token.
+     *  @var String Reset token.
      */
     private $resetToken;
 
     /**
-     *  @var string The date the user account was created.
+     *  @var String The date the user account was created.
      */
     private $createdOn;
 
-     /**
-     *  @var int The User's ID from the database.
+    /**
+     *  @var Int The User's ID from the database.
      */
     private $user_id;
 
     /**
-     *  @var string The User's full name.
+     *  @var String The User's full name.
      */
     private $full_name;
 
     /**
-     *  @var string The User's website.
+     *  @var String The User's website.
      */
     private $website;
 
     /**
-     *  @var string The User's biography.
+     *  @var String The User's biography.
      */
     private $bio;
 
     /**
-     *  @var string The date the data was modified.
+     *  @var String The date the data was modified.
      */
     private $modified_on;
 
@@ -125,7 +125,7 @@ class User{
 
             $token = $rand_num;
 
-           $this->token = (string) clean_data($token);
+            $this->token = (string) clean_data($token);
         } else
            $this->token = (string) clean_data($token);
 
@@ -159,6 +159,16 @@ class User{
     public function set_id(int $id)
     {
         $this->id = clean_data($id);
+    }
+
+    /**
+     * Set Username.
+     * 
+     * @param String The username.
+     */
+    public function set_username(string $username)
+    {
+        $this->username = clean_data($username);
     }
 
     /**
@@ -203,11 +213,12 @@ class User{
     /**
      *  Get the username from the database.
      *
-     *  @param string The username to be verified.
+     *  @param String The username to be verified.
      * 
-     *  @return false || true if the username already exit.
+     *  @return Bool false || true if the username already exist.
      */
-    public static function  checkUsername(string $username) : bool {
+    public function  exist(string $username) : bool
+    {
         // Instantiate a DB object.
         $db = new Database();
         
@@ -216,7 +227,7 @@ class User{
             die("<span style='border-left: 5px solid #f00;'><strong>Error</strong>: Couldn't establish a connection." . $db->error . "</span>");
 
         // Prepare a Statement.
-        $sql = $db->prepare("SELECT username FROM me_users WHERE username = ? LIMIT 1");
+        $sql = $db->prepare('SELECT username FROM me_users WHERE username = ? LIMIT 1');
 
         // Bind Parameter.
         $sql->bind_param('s', $username);
@@ -225,7 +236,7 @@ class User{
         $sql->execute();
 
         // Fetch  data.
-        if ($sql->fetch() == true) {
+        if ($sql->fetch()) {
             return true;
         }
 
@@ -243,7 +254,8 @@ class User{
      *
      *  @return false || true if the email already exit.
      */
-    public static function checkEmail(string $email) : bool {
+    public static function checkEmail(string $email) : bool
+    {
         // Instantiate a DB object.
 		$db = new Database();
 
@@ -276,12 +288,12 @@ class User{
         return false;
     }
 
-	/**
+    /**
      *	Get the user's password from the database.
      *
      *	@return Array User's data.
      */
-    public static function verifyPass(string $username, string $password)
+    public static function is_active(string $username): bool
     {
 		// Instantiate a DB object.
 		$db = new Database();
@@ -290,36 +302,93 @@ class User{
         $username = clean_data($username);
 
 		// Prepare a statement.
-        $sql = $db->prepare('SELECT id, username, password, email, userRole, active FROM me_users WHERE username = ?');
+        $sql = $db->prepare(
+            'SELECT
+                active
+            FROM
+                me_users
+            WHERE
+                username = ?'
+        );
 
         // Bind Parameter.
         $sql->bind_param('s', $username);
 
         // Execute.
-        if ($sql->execute() === true) {
-            // Bind result value.
-            $sql->bind_result($id, $username, $db_password, $email, $user_role, $active);
+        $sql->execute();
+        
+        // Bind result value.
+        $sql->bind_result($account_status);
 
-            // Retrieve rows.
-            if ($sql->fetch() === true) {
-                if ($user_role === 'Subscriber') {
-                    header('Location: '. WEB_ROOT);
-                    exit;
-                }
+        // Fetch data.
+        $sql->fetch();
 
-                // Verify user.
-                if (password_verify($password, $db_password) && $active == 1 && $user_role === 'Administrator') {
-                    // Store user's data
-                    $_SESSION['logged_in'] = true;
-                    $_SESSION['id'] = $id;
-                    $_SESSION['username'] = $username;
-                    $_SESSION['email'] = $email;
-                    $_SESSION['user_role'] = $user_role;
+        // Close Statement.
+        $sql->close();
 
-                    return true;
-                }
-            }
-            return false;
+        // Close Connections.
+        $db->close();
+
+        return (bool) $account_status;
+    }
+
+	/**
+     * Verify the user.
+     *
+     * @param String The username.
+     * @param String The user's password.
+     * @return Array User's data.
+     */
+    public static function verify_pass(
+        string $username,
+        string $password
+    )
+    {
+		// Instantiate a DB object.
+		$db = new Database();
+
+        // Sanitize data.
+        $username = clean_data($username);
+
+		// Prepare a statement.
+        $sql = $db->prepare(
+            'SELECT
+                id,
+                password,
+                userRole,
+                active
+            FROM
+                me_users 
+            WHERE
+                username = ?'
+        );
+
+        // Bind Parameter.
+        $sql->bind_param('s', $username);
+
+        // Execute.
+        $sql->execute();
+
+        // Bind result value.
+        $sql->bind_result(
+            $id,
+            $db_password,
+            $user_role,
+            $status
+        );
+
+        // Retrieve rows.
+        $sql->fetch();
+
+        if (strtolower($user_role) === 'subscriber') {
+            header('Location: '. WEB_ROOT);
+            exit;
+
+        } elseif (
+            password_verify($password, $db_password)
+
+        ) {
+            return $id;
         }
 
         // Close Statement.
@@ -334,18 +403,35 @@ class User{
 	/**
      *	Creates the User account.
      *	
-     *	@return bool true||false.
+     *	@return Bool true||false.
      */
-    public function insert() : bool 
+    public function create_account() : bool 
     {
 		// Instantiate a DB object.
 		$db = new Database();
 
         // Prepare a Statement.
-        $sql = $db->prepare('INSERT INTO me_users(username, password, email, userRole, token) VALUES(?, ?, ?, ?, ?)');
+        $sql = $db->prepare(
+            'INSERT INTO
+                me_users(
+                    username,
+                    password,
+                    email,
+                    userRole,
+                    token
+                )
+            VALUES(?, ?, ?, ?, ?)'
+        );
 
         // Bind Parameters.
-        $sql->bind_param('ssssi', $this->username, $this->password, $this->email, $this->user_role, $this->token);
+        $sql->bind_param(
+            'ssssi',
+            $this->username,
+            $this->password,
+            $this->email,
+            $this->user_role,
+            $this->token
+        );
 
 		// Execute query.
         if ($sql->execute())
