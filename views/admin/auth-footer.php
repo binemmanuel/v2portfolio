@@ -4,7 +4,12 @@
         <footer>
             <script src="<?= WEB_ROOT ?>views/admin/assets/js/auth.js"></script>
             
-            <?php use function portfolio\is_logged_in; ?>
+            <?php
+            use portfolio\LoginToken;
+            use function portfolio\is_logged_in;
+
+            $login_token = new LoginToken()
+            ?>
 
             <?php if (is_logged_in() && $login_token->is_valid($_COOKIE['login-token'])): ?>
                 <script>

@@ -76,7 +76,7 @@ $site_info = (object) $site_info->fetch();
                                     <a href="" class="nav-link">Edit Account</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="" class="nav-link">Log Out</a>
+                                    <a href="<?= WEB_ROOT ?>logout" class="nav-link">Log Out</a>
                                 </li>
                             </ul>
                         </li>

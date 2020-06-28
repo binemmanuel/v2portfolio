@@ -93,8 +93,54 @@ class LoginToken
         return false;
     }
 
+    /**
+     *	Gets a user's ID by login token.
+     *	
+     *	@return Int The user's ID.
+     */
+    public function get_user_id(): int
+    {
+		// Instantiate a DB object.
+		$db = new Database();
+
+		// Prepare & Bind param
+        $stmt = $db->prepare(
+            'SELECT
+                user
+            FROM
+                me_login_token
+            WHERE
+                token = ?'
+        );
+
+        // Bind parameters.
+        $stmt->bind_param('s', $this->token);
+
+		// Execute query & Check if it was successful.
+        $stmt->execute();
+
+        // Bind result value.
+        $stmt->bind_result($user);
+
+        // Fetch
+        $stmt->fetch();
+        
+        // Close Statement.
+        $stmt->close();
+
+        // Close Connection.
+        $db->close();
+
+        return (int) $user;
+    }
+
+    /**
+     * Delete login token
+     */
     public function delete(): bool
     {
+        echo $this->user;
+        
         // Prepare an SQL statement.
         $stmt = $this->db->prepare(
             'DELETE FROM
@@ -121,6 +167,12 @@ class LoginToken
         return false;
     }
 
+    /**
+     * Checks if login token is a valid one.
+     * 
+     * @param String The login token.
+     * @return Bool False or True if the login token is valid.
+     */
     public function is_valid(string $token): bool
     {
         // Prepare an SQL statement.

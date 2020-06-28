@@ -493,50 +493,6 @@ class User{
         return false;
     }
 
-    /**
-     *	Gets a user's password by ID.
-     *	
-     *	@return String The user's password.
-     */
-    public function get_password(): string
-    {
-		// Instantiate a DB object.
-		$db = new Database();
-
-		// Prepare & Bind param
-        $stmt = $db->prepare(
-            'SELECT
-                password
-            FROM
-                me_users
-            WHERE
-                id = ?'
-        );
-
-        // Bind parameters.
-        $stmt->bind_param('i', $this->id);
-
-		// Execute query & Check if it was successful.
-        $stmt->execute();
-
-        // Bind result value.
-        $stmt->bind_result($password);
-
-        // Fetch
-        $stmt->fetch();
-        
-        // Set the password.
-        $this->password = $password;
-        
-        // Close Statement.
-        $stmt->close();
-
-        // Close Connection.
-        $db->close();
-
-        return $password;
-    }
-
 	/**
      *	Fetch the current User object's token and status.
      *	

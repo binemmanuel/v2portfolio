@@ -39,6 +39,7 @@ class Bootstrap
 				(new Home())->not_found();
 
 			} elseif (
+				strtolower($this->url[0]) !== 'logout' &&
 				strtolower($this->url[0]) !== 'login' &&
 				strtolower($this->url[0]) !== 'signup'
 			) {
@@ -73,7 +74,7 @@ class Bootstrap
 				$controller = new $ct_name();
 				
 				if (empty($this->url[1])) {
-					$action = $this->url[0];
+					$action = clean_data($this->url[0]);
 					
 					$controller->$action();
 				} else {

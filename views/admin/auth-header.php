@@ -28,8 +28,10 @@ if (!empty($this->response)) {
         <main class="form-container">
             <!-- .logo -->
             <div class="logo">
-                <img
-                    src="<?= WEB_ROOT ?>views/starlyon/assets/img/logo.png"
-                    alt="logo" />
+                <a href="<?= WEB_ROOT ?>login/">
+                    <img
+                        src="<?= WEB_ROOT ?>views/starlyon/assets/img/logo.png"
+                        alt="logo" />
+                </a>
             </div>
             <!-- .logo /-->
