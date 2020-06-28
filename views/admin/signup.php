@@ -3,19 +3,11 @@
 
 use function portfolio\valid_roles;
 
-$page_title = 'Login';
+$page_title = 'Signup';
 
 // Include auth header file
 include 'auth-header.php';
 ?>
-            <!-- .logo -->
-            <div class="logo">
-                <img
-                    src="<?= WEB_ROOT ?>views\starlyon\assets\img\logo.png"
-                    alt="logo" />
-            </div>
-            <!-- .logo /-->
-
             <form action="<?= WEB_ROOT ?>signup/auth" method="post">
                 <?php if (!empty($response->error)): ?>
                     <!-- .alert alert-error -->

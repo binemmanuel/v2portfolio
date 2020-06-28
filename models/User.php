@@ -105,6 +105,15 @@ class User extends BaseModel
 
             $this->response->filled_data->username = clean_data($data['username']);
 
+        } elseif (empty($this->user::exist(clean_data($data['username'])))) {
+            $this->response->error = true;
+            $this->response->message = 'Incorrect username or password.';
+            $this->response->type = 'username and password';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = clean_data($data['username']);
+            
         } elseif (!$this->user::is_active(clean_data($data['username']))) {
             $this->response->error = true;
             $this->response->message = 'Sorry! Your account is inactive,';
@@ -144,7 +153,7 @@ class User extends BaseModel
                     \setcookie(
                         'login-token',
                         $login_token->get_token(),
-                        time() + 1440,
+                        time() + 1640,
                         '/'
                     );
 
@@ -193,6 +202,17 @@ class User extends BaseModel
         } elseif (empty($data['email'])) {
             $this->response->error = true;
             $this->response->message = 'Please enter your email address.';
+            $this->response->type = 'email';
+
+            $this->response->filled_data = new stdClass;
+
+            $this->response->filled_data->username = $data['username'];
+            $this->response->filled_data->email = $data['email'];
+            $this->response->filled_data->user_role = $data['user-role'];
+
+        } elseif ($this->user::checkEmail(clean_data($data['email']))) {
+            $this->response->error = true;
+            $this->response->message = 'The email address has already been registered by another user.';
             $this->response->type = 'email';
 
             $this->response->filled_data = new stdClass;
@@ -293,6 +313,21 @@ class User extends BaseModel
                 'status' => $data['status'],
                 'bio' => $data['bio']
             ];
+        } elseif ($this->user::checkEmail(clean_data($data['email']))) {
+            $this->response->error = true;
+            $this->response->message = 'The email address has already been registered by another user.';
+            $this->response->type = 'email';
+
+            $this->response->filled_data = [
+                'id' => $data['id'],
+                'first_name' => $data['first-name'],
+                'last_name' => $data['last-name'], 
+                'email' => $data['email'],
+                'website' => $data['website'],
+                'status' => $data['status'],
+                'bio' => $data['bio']
+            ];
+
         } elseif (
             !empty($data['website']) &&
             !filter_var($data['website'], FILTER_VALIDATE_URL)

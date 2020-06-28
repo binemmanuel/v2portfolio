@@ -10,7 +10,7 @@ use controller\adminin;
 class Bootstrap
 {
 	/**
-     *  @var string The requested page with/without an action.
+     *  @var String The requested page with/without an action.
      */
     public $url;
 	
@@ -28,13 +28,10 @@ class Bootstrap
 				(new Home())->get();
 
 			// Store the file name.
-			$file_name = 'controllers'. DIRECTORY_SEPARATOR .$this->url[0].".php";
+			$file_name = './controllers'. DIRECTORY_SEPARATOR . ucwords($this->url[0]).".php";
 
 			// Set the class name.
 			$ct_name = 'controller\\' .ucwords($this->url[0]);
-			
-			// Instantiate an Object.
-			$controller = new $ct_name();
 
 			// Check if the file exist.
 			if (!file_exists($file_name)) {
@@ -45,6 +42,9 @@ class Bootstrap
 				strtolower($this->url[0]) !== 'login' &&
 				strtolower($this->url[0]) !== 'signup'
 			) {
+				// Instantiate an Object.
+				$controller = new $ct_name();
+
 				// Check if an action was mentioned.
 				if (empty($this->url[1])){
 					// Get data.
@@ -69,6 +69,9 @@ class Bootstrap
 					}
 				}
 			} else {
+				// Instantiate an Object.
+				$controller = new $ct_name();
+				
 				if (empty($this->url[1])) {
 					$action = $this->url[0];
 					

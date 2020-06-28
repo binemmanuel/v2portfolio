@@ -33,7 +33,7 @@ License version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
 html{
     font-family: var(--body-font);
     font-size: 10px;
-    background: rgb(190 190 190 / 68%);
+    background: rgba(219, 219, 219, 0.335);
     color: var(--body-color);
     scroll-behavior: smooth;
 }

@@ -9,6 +9,7 @@
  *
  * @version	1.0
  */
+session_start();
 
 use portfolio\SiteInfo;
 

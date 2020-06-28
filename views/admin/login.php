@@ -5,14 +5,6 @@ $page_title = 'Login';
 // Include auth header file
 include 'auth-header.php';
 ?>
-            <!-- .logo -->
-            <div class="logo">
-                <img
-                    src="<?= WEB_ROOT ?>views\starlyon\assets\img\logo.png"
-                    alt="logo" />
-            </div>
-            <!-- .logo /-->
-
             <form action="<?= WEB_ROOT ?>login/auth" method="post">
                 <?php if (!empty($response->error)): ?>
                     <!-- .alert alert-error -->

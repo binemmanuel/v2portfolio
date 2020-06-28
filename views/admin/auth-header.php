@@ -26,3 +26,10 @@ if (!empty($this->response)) {
     <body>
         <!-- .form-container -->
         <main class="form-container">
+            <!-- .logo -->
+            <div class="logo">
+                <img
+                    src="<?= WEB_ROOT ?>views/starlyon/assets/img/logo.png"
+                    alt="logo" />
+            </div>
+            <!-- .logo /-->

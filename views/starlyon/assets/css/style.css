@@ -871,7 +871,7 @@ footer{
 /* Animations Ends*/
 
 /* Media Query */
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 950px) {
     section{
         padding: 8.9rem 0;
     }

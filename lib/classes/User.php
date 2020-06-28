@@ -217,7 +217,7 @@ class User{
      * 
      *  @return Bool false || true if the username already exist.
      */
-    public function  exist(string $username) : bool
+    public static function exist(string $username) : bool
     {
         // Instantiate a DB object.
         $db = new Database();
@@ -227,26 +227,27 @@ class User{
             die("<span style='border-left: 5px solid #f00;'><strong>Error</strong>: Couldn't establish a connection." . $db->error . "</span>");
 
         // Prepare a Statement.
-        $sql = $db->prepare('SELECT username FROM me_users WHERE username = ? LIMIT 1');
+        $stmt = $db->prepare('SELECT username FROM me_users WHERE username = ? LIMIT 1');
 
         // Bind Parameter.
-        $sql->bind_param('s', $username);
+        $stmt->bind_param('s', $username);
 
         // Execute.
-        $sql->execute();
+        $stmt->execute();
 
-        // Fetch  data.
-        if ($sql->fetch()) {
-            return true;
-        }
+        // Store return values.
+        $stmt->store_result();
+
+        // Store the number of rows.
+        $num_rows = $stmt->num_rows();
 
         // Close Statement.
-        $sql->close();
+        $stmt->close();
 
         // Close Connection.
         $db->close();
 
-        return false;
+        return (bool) $num_rows;
     }
 
     /**
@@ -264,28 +265,27 @@ class User{
             die("<span style='border-left: 5px solid #f00;'><strong>Error</strong>: Couldn't establish a connection." . $db->error . "</span>");
 
         // Prepare a Statement.
-        $sql = $db->prepare("SELECT email FROM me_users WHERE email = ? LIMIT 1");
+        $stmt = $db->prepare("SELECT email FROM me_users WHERE email = ? LIMIT 1");
 
         // Bind Parameter.
-        $sql->bind_param('s', $email);
+        $stmt->bind_param('s', $email);
 
         // Execute.
-        $sql->execute();
+        $stmt->execute();
 
-        // Bind result value
-        $sql->bind_result($user);
+        // Store return values.
+        $stmt->store_result();
 
-        if ($sql->fetch() == true) {
-            return true;
-        }
+        // Store the number of rows.
+        $num_rows = $stmt->num_rows();
 
         // Close Statement.
-        $sql->close();
+        $stmt->close();
 
         // Close Connection.
         $db->close();
 
-        return false;
+        return (bool) $num_rows;
     }
 
     /**

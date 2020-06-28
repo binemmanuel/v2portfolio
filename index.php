@@ -4,4 +4,4 @@ require 'lib/config.php';
 
 use portfolio\Bootstrap;
 
-$app =  new Bootstrap();
+$app =  new Bootstrap();;
