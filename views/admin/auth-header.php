@@ -22,6 +22,7 @@ if (!empty($this->response)) {
 
         <!-- Custom CSS -->
         <link rel="stylesheet" href="<?= WEB_ROOT ?>views/admin/assets/css/auth-style.css">
+        <link rel="stylesheet" href="<?= WEB_ROOT ?>views/admin/assets/css/loader.css">
     </head>
     <body>
         <!-- .form-container -->

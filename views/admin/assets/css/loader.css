@@ -1,4 +1,5 @@
-.loader-container{
+/* Loader two */
+/* .loader-container{
     width: 10rem;
     height: 10rem;
     position: relative;
@@ -24,5 +25,69 @@
     }
     50%{
         transform: scale(1.0);
+    }
+} */
+
+/* Loader one */
+/* .loader-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 96vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    background: #e1e1e129;
+}
+.loader{
+    height: 4rem;
+    width: 4rem;
+    animation: loader 1.2s infinite ease-in-out; 
+}
+@keyframes loader {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        background-color: orange;
+    }
+    50% {
+        transform: perspective(120px) rotateX(180.1deg) rotateY(0deg);
+        background-color: red;
+    }
+    100% {
+        transform: perspective(120px) rotateX(180deg) rotateY(180deg);
+        background-color: brown;
+    }
+} */
+
+/* Loader three */
+.loader-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.137);
+    height: .5rem;
+    width: 100%;
+    overflow: hidden;
+}
+.loader{
+    background: rgb(0 124 186);
+    height: inherit;
+    width: initial;
+    animation: loader 5s linear infinite;
+}
+
+.login .loader{
+    background: rgb(17 46 78);
+}
+
+@keyframes loader {
+    0%, 100% {
+        transform: translateX(-100%);
+    }
+    50% {
+        transform: translateX(100%);
     }
 }

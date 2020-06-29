@@ -1,3 +1,14 @@
+import { Ajax } from "./ajax.js"
+
+let keyword = 'news'
+const ajax = new Ajax(
+    'post',
+    'http://localhost/portfolio/admin/users/search',
+    '#search-result',
+    `keyword=${keyword}&async=true`
+)
+
+
 const $ = (selector, parent) => {
     return document.querySelector(selector)
 }
@@ -32,10 +43,13 @@ function copy_url(web_root, url) {
     document.execCommand('Copy', false, null)
     
     let clipboard = document.createElement('div')
-    clipboard.className = 'clipboard'
     let text = document.createElement('p')
-    text.style.fontSize = '2rem'
+
+    clipboard.className = 'clipboard'
     text.innerText = 'Copied to Clipboard.'
+
+    text.style.fontSize = '2rem'
+    
     clipboard.append(text)
     body.append(clipboard)
 
@@ -43,15 +57,17 @@ function copy_url(web_root, url) {
     clipboard.style.transition = 'transform .95s ease-in-out'
     
     setTimeout(() => {
+        // Slide in.
         clipboard.style.transform = 'translateX(0)'
     }, 20)
 
-
     setTimeout(() => {
+        // Slide out.
         clipboard.style.transform = 'translateX(200%)'
     }, 2400)
 
     setTimeout(() => {
+        // Remove from DOM.
         clipboard.parentNode.removeChild(clipboard)
         tmp_element.parentNode.removeChild(tmp_element)
     }, 3000)
@@ -135,7 +151,7 @@ let side_nav_item = $$('.side-nav-item')
 let side_nav_links = $$('.side-nav-item span')
 
 let page = window.location.href
-url_page = page.split('/')
+let url_page = page.split('/')
 
 side_nav_item.forEach(side_nav_item =>{
     const page_title = side_nav_item.querySelector('span').innerText

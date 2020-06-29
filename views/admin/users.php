@@ -142,9 +142,9 @@ $count = $this->response->counts;
 </section>
 <!-- .projects-panel /-->
 
-<script>
+<!-- <script>
     window.onload = () => {
-        const search_bar = $('#search-bar')
+        const search_bar = document.querySelector('#search-bar')
 
         search_bar.addEventListener('keyup', (event) => {
             let keyword = search_bar.value
@@ -165,4 +165,4 @@ $count = $this->response->counts;
 
         
     }
-</script>
+</script> -->

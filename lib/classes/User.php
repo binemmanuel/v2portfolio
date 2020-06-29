@@ -494,42 +494,6 @@ class User{
     }
 
 	/**
-     *	Fetch the current User object's token and status.
-     *	
-     *	@return Array || NULL if the user record wasn't found.
-     */
-    public function getToken()
-    {
-		// Instantiate a DB object.
-		$db = new Database();
-
-		// Prepare & Bind param
-        $sql = "SELECT active, token FROM bank_users WHERE username = '$this->username'";
-
-		// Execute query & Check if it was successful.
-        $result = $db->query($sql);
-
-        if ($result->num_rows == 1) {
-            if ($row = $result->fetch_assoc()) {
-				// Store user's data
-                $userData = [
-                    'status' => $row['active'],
-                    'token' => $row['token']
-                ];
-                return $userData;
-            }
-        }
-        
-        // Close Statement.
-        $sql->close();
-
-        // Close Connection.
-        $db->close();
-
-        return false;
-    }
-
-	/**
      * Get the list of User objects in the database.
      * 
      * @param string The in which the data would be sorted.
