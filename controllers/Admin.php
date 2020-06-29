@@ -28,9 +28,9 @@ class Admin extends BaseController
         }
         $this->admin_template = $this->info->admin_template;
 
-        $login_token = new LoginToken;
+        $this->login_token = new LoginToken;
 
-        if (!is_logged_in() || !$login_token->is_valid($_COOKIE['login-token'])) {
+        if (!is_logged_in() || !$this->login_token->is_valid($_COOKIE['login-token'])) {
             header('Location: '. WEB_ROOT . 'login/');
             exit;
         }
@@ -341,7 +341,7 @@ class Admin extends BaseController
                     $this->view->response = $model->search($_POST);
 
                     // Render a projects page.
-                    $this->view->load('search-users', $this->admin_template);
+                    $this->view->render('search-users', $this->admin_template);
                 } else {
                     // Return a response to the view.
                     $this->view->response = $model->search($_POST);

@@ -1,14 +1,3 @@
-import { Ajax } from "./ajax.js"
-
-let keyword = 'news'
-const ajax = new Ajax(
-    'post',
-    'http://localhost/portfolio/admin/users/search',
-    '#search-result',
-    `keyword=${keyword}&async=true`
-)
-
-
 const $ = (selector, parent) => {
     return document.querySelector(selector)
 }

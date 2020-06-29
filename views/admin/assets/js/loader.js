@@ -1,4 +1,4 @@
-export class Loader {
+class Loader {
     constructor() {
         // Create Loader container.
         this.loader_container = document.createElement('div')
@@ -28,6 +28,8 @@ export class Loader {
      * Stop loader.
      */
     stop = () => {
+        this.loader_container = document.querySelector('.loader-container');
+
         this.loader_container.parentNode.removeChild(this.loader_container)
     } 
 }

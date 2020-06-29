@@ -8,7 +8,7 @@
  * 
  * @return Void
  */
-export class Ajax extends XMLHttpRequest {
+class Ajax extends XMLHttpRequest {
     constructor (
         method,
         server,
@@ -23,33 +23,20 @@ export class Ajax extends XMLHttpRequest {
         this.url = url
 
         this.onreadystatechange = function () {
-            if (this.readyState < 4) {
-                // let search_box = document.querySelector(element)
-    
-                // const loader_container = document.createElement('div')
-                // const first_bounce = document.createElement('div')
-                // const last_bounce = document.createElement('div')
-    
-                // loader_container.className = 'loader-container'
-                // first_bounce.classList.add('bounce')
-                // first_bounce.classList.add('first-bounce')
-    
-                // last_bounce.classList.add('bounce')
-                // last_bounce.classList.add('last-bounce')
-    
-                // loader_container.append(first_bounce)
-                // loader_container.append(last_bounce)
-    
-                // search_box.innerHTML = ''
-                // search_box.append(loader_container)
-    
-                // const loader = new Loader
-                // loader.display()
+            const loader = new Loader
+            if (this.readyState === 4 && this.status === 200) {
+                // Display resonse.
+                document.querySelector(element).innerHTML = this.responseText
+                
+                setTimeout(() => {
+                    // Stop loader.
+                    loader.stop()
+                }, 2000)
+            } else if (this.readyState === 3) {
+                // Display loader.
+                loader.display('.main-section')
             }
-    
-            // if (this.readyState === 4 && this.status === 200) {
-            //     document.querySelector(element).innerHTML = this.responseText
-            // }
+            
         }
         
         switch (this.method.toLowerCase()) {

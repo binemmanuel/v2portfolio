@@ -142,16 +142,16 @@ $count = $this->response->counts;
 </section>
 <!-- .projects-panel /-->
 
-<!-- <script>
+<script>
     window.onload = () => {
         const search_bar = document.querySelector('#search-bar')
 
         search_bar.addEventListener('keyup', (event) => {
             let keyword = search_bar.value
         
-            const ajax = Ajax(
+            const ajax = new Ajax(
                 'post',
-                '<?= WEB_ROOT ?>/admin/users/search',
+                '<?= WEB_ROOT ?>admin/users/search',
                 '#search-result',
                 `keyword=${keyword}&async=true`
             )
@@ -165,4 +165,4 @@ $count = $this->response->counts;
 
         
     }
-</script> -->
+</script>

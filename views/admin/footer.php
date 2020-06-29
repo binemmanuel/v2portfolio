@@ -17,7 +17,9 @@
             <!-- .flexbox .container -->
         </main>
         <footer>
-            <script type="module" src="<?= WEB_ROOT ?>views\admin\assets\js\main.js"></script>
+            <script src="<?= WEB_ROOT ?>views\admin\assets\js\loader.js"></script>
+            <script  src="<?= WEB_ROOT ?>views\admin\assets\js\ajax.js"></script>
+            <script src="<?= WEB_ROOT ?>views\admin\assets\js\main.js"></script>
         </footer>
     </body>
 </html>

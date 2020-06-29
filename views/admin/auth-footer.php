@@ -2,7 +2,8 @@
         <!-- .form-container /-->
 
         <footer>
-            <script type="module" src="<?= WEB_ROOT ?>views/admin/assets/js/auth.js"></script>
+            <script src="<?= WEB_ROOT ?>views/admin/assets/js/loader.js"></script>
+            <script src="<?= WEB_ROOT ?>views/admin/assets/js/auth.js"></script>
             
             <?php
             use portfolio\LoginToken;

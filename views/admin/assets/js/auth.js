@@ -1,5 +1,3 @@
-import { Loader } from "./Loader.js";
-
 let btn = document.querySelector('.btn')
 let body = document.querySelector('body')
 
