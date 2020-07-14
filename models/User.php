@@ -516,6 +516,7 @@ class User extends BaseModel
                         ];
                     }
                 } else {
+                    // Save data.
                     if (
                         $user_info->save() &&
                         $this->user->change_password() &&
