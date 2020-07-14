@@ -23,9 +23,9 @@ function copy_url(web_root, url) {
     tmp_element.style.position = 'absolute'
     tmp_element.style.top = '-1000%'
     tmp_element.setAttribute('value', web_root + url.value)
+    tmp_element.value = web_root + url.value
     body.append(tmp_element)
     
-
     tmp_element.select();
     tmp_element.focus()
     document.execCommand('SelectAll`')
@@ -62,16 +62,37 @@ function copy_url(web_root, url) {
     }, 3000)
 }
 
-function delete_media_modal(
-    media_id,
-    link_id,
-    form
+/**
+ * Displays the delete modal.
+ * 
+ * @param Int The project's id 
+ */
+function delete_project_modal(
+    project_id
 ) {
     body.classList.add('show-delete-modal')
     body.classList.remove('show-edit-modal')
 
-    let modal_input_id = form.querySelector('#object_id')
-    let modal_input_link = form.querySelector('#object_link')
+    let modal_input_id = document.querySelector('#object_id')    
+    modal_input_id.value = project_id
+}
+
+/**
+ * Displays the delete modal.
+ * 
+ * @param {Int} media_id 
+ * @param {Int} link_id 
+ * @param {Int} form 
+ */
+function delete_media_modal(
+    media_id,
+    link_id
+) {
+    body.classList.add('show-delete-modal')
+    body.classList.remove('show-edit-modal')
+
+    let modal_input_id = document.querySelector('#object_id')
+    let modal_input_link = document.querySelector('#object_link')
     modal_input_id.value = document.querySelector(media_id).value
     modal_input_link.value = document.querySelector(link_id).value
 }
@@ -186,11 +207,14 @@ if (close_btns !== null) {
             event.preventDefault();
             
             let modal = $('#modal')
-            
-            modal.style.display = 'none'
+
+            if (modal !== null) {
+                modal.style.display = 'none'
+                
+            }
             body.classList.remove('show-uploader')
             body.classList.remove('show-delete-modal')
-            body.classList.remove('show-edit-modal')
+            body.classList.remove('show-edit-modal')    
 
             let display_container = document.querySelector('.edit-modal-file')
             if (display_container !== null) {
@@ -228,7 +252,7 @@ check_all.forEach(checkbox => {
 });
 
 
-async function search(
+/* async function search(
     url,
     data = {}
 ) {
@@ -246,7 +270,7 @@ async function search(
     })
 
     return response.json()
-}  
+}  */ 
 
 // search('<?= WEB_ROOT ?>admin/users/search', {
 //     answer: 200

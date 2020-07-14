@@ -1,7 +1,7 @@
 class ClientRect {
     constructor(element) {
         this.element = document.querySelectorAll(element)
-        // console.log(element);
+        console.log(this.element);
         
     }
 

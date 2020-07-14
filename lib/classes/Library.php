@@ -338,7 +338,6 @@ class Library
 
 		// Instantiate a DB object.
 		$db = new Database();
-
 		// Prepare a Statement.
 		$stmt = $db->prepare(
 			'UPDATE

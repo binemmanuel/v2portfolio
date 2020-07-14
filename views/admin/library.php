@@ -240,8 +240,8 @@ if (!empty($this->form_response)) {
         <!-- .edit-modal-file-detail -->
         <div class="edit-modal-file-detail">
             <form action="<?= WEB_ROOT ?>admin/library/edit" method="POST" id="edit_modal_form" >
-                <input type="hidden" name='id' id="edit_object_id" />
-                <input type="hidden" name='file' id="edit_object_link" />
+                <input type="text" name='id' id="edit_object_id" />
+                <input type="text" name='file' id="edit_object_link" />
 
                 <div>
                     <label for="">File Name</label>

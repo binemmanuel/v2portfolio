@@ -1,4 +1,5 @@
 <?php
+
 namespace model;
 
 use portfolio\BaseModel;
@@ -56,7 +57,7 @@ class User extends BaseModel
 
     public function get_moderators()
     {
-        
+
         $this->response->users = $this->user->get_all('moderator');
 
         return $this->response;
@@ -64,16 +65,16 @@ class User extends BaseModel
 
     public function get_subscribers()
     {
-        
+
         $this->response->users = $this->user->get_all('subscriber');
 
         return $this->response;
     }
 
     public function search(array $data)
-    {        
+    {
         $keyword = (!empty($data['keyword'])) ? clean_data($data['keyword']) : '';
-        
+
         $this->response->users = $this->user->search($keyword);
 
         return $this->response;
@@ -95,7 +96,6 @@ class User extends BaseModel
             $this->response->filled_data = new stdClass;
 
             $this->response->filled_data->username = clean_data($data['username']);
-
         } elseif (empty($data['password'])) {
             $this->response->error = true;
             $this->response->message = 'Please enter a password.';
@@ -104,7 +104,6 @@ class User extends BaseModel
             $this->response->filled_data = new stdClass;
 
             $this->response->filled_data->username = clean_data($data['username']);
-
         } elseif (empty($this->user::exist(clean_data($data['username'])))) {
             $this->response->error = true;
             $this->response->message = 'Incorrect username or password.';
@@ -113,7 +112,6 @@ class User extends BaseModel
             $this->response->filled_data = new stdClass;
 
             $this->response->filled_data->username = clean_data($data['username']);
-            
         } elseif (!$this->user::is_active(clean_data($data['username']))) {
             $this->response->error = true;
             $this->response->message = 'Sorry! Your account is inactive,';
@@ -128,7 +126,7 @@ class User extends BaseModel
                 clean_data($data['username']),
                 clean_data($data['password'])
             );
-            
+
             if (!$user_id) {
                 $this->response->error = true;
                 $this->response->message = 'Incorrect username or password.';
@@ -147,7 +145,7 @@ class User extends BaseModel
 
                 // Delete prev login token.
                 $login_token->delete($user_id);
-                
+
                 // Save token.
                 if ($login_token->save()) {
                     \setcookie(
@@ -161,7 +159,7 @@ class User extends BaseModel
                     $this->response->message = 'Logedin Successfully.';
                     $this->response->type = '';
 
-                    header('Location: '. WEB_ROOT . 'admin/');
+                    header('Location: ' . WEB_ROOT . 'admin/');
                     exit;
                 }
             }
@@ -188,7 +186,6 @@ class User extends BaseModel
             $this->response->filled_data->username = $data['username'];
             $this->response->filled_data->email = $data['email'];
             $this->response->filled_data->user_role = $data['user-role'];
-        
         } elseif ($this->user->exist(clean_data($data['username']))) {
             $this->response->error = true;
             $this->response->message = 'The user name you entered already exists.';
@@ -209,8 +206,7 @@ class User extends BaseModel
             $this->response->filled_data->username = $data['username'];
             $this->response->filled_data->email = $data['email'];
             $this->response->filled_data->user_role = $data['user-role'];
-
-        } elseif ($this->user::checkEmail(clean_data($data['email']))) {
+        } elseif ($this->user::emailExist(clean_data($data['email']))) {
             $this->response->error = true;
             $this->response->message = 'The email address has already been registered by another user.';
             $this->response->type = 'email';
@@ -220,7 +216,6 @@ class User extends BaseModel
             $this->response->filled_data->username = $data['username'];
             $this->response->filled_data->email = $data['email'];
             $this->response->filled_data->user_role = $data['user-role'];
-
         } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
             $this->response->error = true;
             $this->response->message = 'Please enter a valid email address.';
@@ -231,7 +226,6 @@ class User extends BaseModel
             $this->response->filled_data->username = $data['username'];
             $this->response->filled_data->email = $data['email'];
             $this->response->filled_data->user_role = $data['user-role'];
-
         } elseif (empty($data['password'])) {
             $this->response->error = true;
             $this->response->message = 'Please enter a password.';
@@ -242,7 +236,6 @@ class User extends BaseModel
             $this->response->filled_data->username = $data['username'];
             $this->response->filled_data->email = $data['email'];
             $this->response->filled_data->user_role = $data['user-role'];
-
         } elseif (strlen($data['password']) < 6) {
             $this->response->error = true;
             $this->response->message = 'Password too short.';
@@ -254,7 +247,6 @@ class User extends BaseModel
             $this->response->filled_data->username = $data['username'];
             $this->response->filled_data->email = $data['email'];
             $this->response->filled_data->user_role = $data['user-role'];
-            
         } elseif (empty($data['confirm-password'])) {
             $this->response->error = true;
             $this->response->message = 'Please conform your password.';
@@ -265,7 +257,6 @@ class User extends BaseModel
             $this->response->filled_data->username = $data['username'];
             $this->response->filled_data->email = $data['email'];
             $this->response->filled_data->user_role = $data['user-role'];
-            
         } elseif ($data['confirm-password'] !== $data['password']) {
             $this->response->error = true;
             $this->response->message = 'Sorry! The retyped password doesn\'t match';
@@ -277,16 +268,15 @@ class User extends BaseModel
             $this->response->filled_data->username = $data['username'];
             $this->response->filled_data->email = $data['email'];
             $this->response->filled_data->user_role = $data['user-role'];
-            
         } else {
             $user = $this->user;
-            
+
             // Set data.
             $user->set_username(clean_data($data['username']));
             $user->set_email(clean_data($data['email']));
             $user->set_user_role(clean_data($data['user-role']));
             $user->set_password(\password_hash($data['password'], PASSWORD_DEFAULT));
-            
+
             if ($user->create_account()) {
                 $this->response->error = false;
                 $this->response->message = 'Signup Successfully.';
@@ -300,34 +290,51 @@ class User extends BaseModel
     public function update(array $data): object
     {
         // validate email
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        if (empty($data['username'])) {
+            $this->response->error = true;
+            $this->response->message = 'Username can not be empty.';
+            $this->response->type = 'username';
+            $this->response->filled_data = [
+                'id' => $data['id'],
+                'first_name' => $data['first-name'],
+                'last_name' => $data['last-name'],
+                'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
+                'website' => $data['website'],
+                'status' => $data['status'],
+                'bio' => $data['bio']
+            ];
+        } elseif (
+            empty($data['new-email']) ||
+            empty($data['old-email'])
+        ) {
+            $this->response->error = true;
+            $this->response->message = 'Email can not be empty.';
+            $this->response->type = 'email';
+            $this->response->filled_data = [
+                'id' => $data['id'],
+                'first_name' => $data['first-name'],
+                'last_name' => $data['last-name'],
+                'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
+                'website' => $data['website'],
+                'status' => $data['status'],
+                'bio' => $data['bio']
+            ];
+        } elseif (
+            !filter_var($data['old-email'], FILTER_VALIDATE_EMAIL) ||
+            !filter_var($data['new-email'], FILTER_VALIDATE_EMAIL)
+        ) {
             $this->response->error = true;
             $this->response->message = 'Invalid email address.';
             $this->response->type = 'email';
             $this->response->filled_data = [
                 'id' => $data['id'],
                 'first_name' => $data['first-name'],
-                'last_name' => $data['last-name'], 
-                'email' => $data['email'],
+                'last_name' => $data['last-name'],
+                'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
                 'website' => $data['website'],
                 'status' => $data['status'],
                 'bio' => $data['bio']
             ];
-        } elseif ($this->user::checkEmail(clean_data($data['email']))) {
-            $this->response->error = true;
-            $this->response->message = 'The email address has already been registered by another user.';
-            $this->response->type = 'email';
-
-            $this->response->filled_data = [
-                'id' => $data['id'],
-                'first_name' => $data['first-name'],
-                'last_name' => $data['last-name'], 
-                'email' => $data['email'],
-                'website' => $data['website'],
-                'status' => $data['status'],
-                'bio' => $data['bio']
-            ];
-
         } elseif (
             !empty($data['website']) &&
             !filter_var($data['website'], FILTER_VALIDATE_URL)
@@ -338,8 +345,8 @@ class User extends BaseModel
             $this->response->filled_data = [
                 'id' => $data['id'],
                 'first_name' => $data['first-name'],
-                'last_name' => $data['last-name'], 
-                'email' => $data['email'],
+                'last_name' => $data['last-name'],
+                'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
                 'website' => $data['website'],
                 'status' => $data['status'],
                 'bio' => $data['bio']
@@ -354,8 +361,8 @@ class User extends BaseModel
             $this->response->filled_data = [
                 'id' => $data['id'],
                 'first_name' => $data['first-name'],
-                'last_name' => $data['last-name'], 
-                'email' => $data['email'],
+                'last_name' => $data['last-name'],
+                'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
                 'website' => $data['website'],
                 'status' => $data['status'],
                 'bio' => $data['bio']
@@ -370,19 +377,18 @@ class User extends BaseModel
             $this->response->filled_data = [
                 'id' => $data['id'],
                 'first_name' => $data['first-name'],
-                'last_name' => $data['last-name'], 
-                'email' => $data['email'],
+                'last_name' => $data['last-name'],
+                'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
                 'website' => $data['website'],
                 'status' => $data['status'],
                 'bio' => $data['bio']
             ];
         } else {
             // Instantiate a user object.
-                $user_info = new UserInfo();
+            $user_info = new UserInfo();
 
             // Set data.
             $this->user->set_id((int) clean_data($data['id']));
-            $this->user->set_email((string) clean_data($data['email']));
             $this->user->set_status((int) clean_data($data['status']));
             $this->user->set_user_role((string) clean_data($data['user_role']));
 
@@ -393,50 +399,144 @@ class User extends BaseModel
                 $this->user->set_password($data['password']);
             }
 
-             // Check if first and last name is set.
-            $data['first-name'] = (!empty($data['first-name'])) ? clean_data($data['first-name']) : '';
-            $data['last-name'] = (!empty($data['last-name'])) ? clean_data($data['last-name']) : '';
+            // Check if email changed.
+            if ($data['new-email'] !== $data['old-email']) {
+                //  Check if the email address already exists.
+                if ($this->user::emailExist(clean_data($data['new-email']))) {
+                    $this->response->error = true;
+                    $this->response->message = 'The email address has already been registered by another user.';
+                    $this->response->type = 'email';
 
-            // Set full name.
-            $data['full-name'] = $data['first-name'] .' '. $data['last-name'];
-
-            $user_info->set_id((int) clean_data($data['id']));
-            $user_info->set_full_name((string) clean_data($data['full-name']));
-            $user_info->set_website((string) clean_data($data['website']));
-            $user_info->set_bio((string) clean_data($data['bio']));
-
-            if ($user_info->has_data()) {
-                if ($user_info->update() && $this->user->update()) {
-                    $this->response->error = false;
-                    $this->response->message = 'Updated Successfully.';
-                    $this->response->type = '';
                     $this->response->filled_data = [
                         'id' => $data['id'],
                         'first_name' => $data['first-name'],
-                        'last_name' => $data['last-name'], 
-                        'email' => $data['email'],
+                        'last_name' => $data['last-name'],
+                        'email' => $data['old-email'],
                         'website' => $data['website'],
                         'status' => $data['status'],
-                        'user_role' => $data['user_role'],
                         'bio' => $data['bio']
                     ];
-                };
+                } else {
+                    $data['email'] = (empty($data['new-email'])) ? clean_data($data['old-email']) : clean_data($data['new-email']);
+                    $this->user->set_email((string) $data['email']);
+
+                    // Check if first and last name is set.
+                    $data['first-name'] = (!empty($data['first-name'])) ? clean_data($data['first-name']) : '';
+                    $data['last-name'] = (!empty($data['last-name'])) ? clean_data($data['last-name']) : '';
+
+                    // Set full name.
+                    $data['full-name'] = $data['first-name'] . ' ' . $data['last-name'];
+
+                    $user_info->set_id((int) clean_data($data['id']));
+                    $user_info->set_full_name((string) clean_data($data['full-name']));
+                    $user_info->set_website((string) clean_data($data['website']));
+                    $user_info->set_bio((string) clean_data($data['bio']));
+
+                    if ($user_info->has_data()) {
+                        if (
+                            $user_info->update() &&
+                            $this->user->change_email() &&
+                            $this->user->change_password() &&
+                            $this->user->change_status() &&
+                            $this->user->change_role()
+                        ) {
+                            $this->response->error = false;
+                            $this->response->message = 'Updated Successfully.';
+                            $this->response->type = '';
+                            $this->response->filled_data = [
+                                'id' => $data['id'],
+                                'first_name' => $data['first-name'],
+                                'last_name' => $data['last-name'],
+                                'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
+                                'website' => $data['website'],
+                                'status' => $data['status'],
+                                'user_role' => $data['user_role'],
+                                'bio' => $data['bio']
+                            ];
+                        }
+                    } else {
+                        if (
+                            $user_info->save() &&
+                            $this->user->change_email() &&
+                            $this->user->change_password() &&
+                            $this->user->change_status() &&
+                            $this->user->change_role()
+                        ) {
+                            $this->response->error = false;
+                            $this->response->message = 'Updated Successfully.';
+                            $this->response->type = '';
+                            $this->response->filled_data = [
+                                'id' => $data['id'],
+                                'first_name' => $data['first-name'],
+                                'last_name' => $data['last-name'],
+                                'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
+                                'website' => $data['website'],
+                                'status' => $data['status'],
+                                'user_role' => $data['user_role'],
+                                'bio' => $data['bio']
+                            ];
+                        }
+                    }
+                }
             } else {
-                if ($user_info->save() && $this->user->update()) {
-                    $this->response->error = false;
-                    $this->response->message = 'Updated Successfully.';
-                    $this->response->type = '';
-                    $this->response->filled_data = [
-                        'id' => $data['id'],
-                        'first_name' => $data['first-name'],
-                        'last_name' => $data['last-name'], 
-                        'email' => $data['email'],
-                        'website' => $data['website'],
-                        'status' => $data['status'],
-                        'user_role' => $data['user_role'],
-                        'bio' => $data['bio']
-                    ];
-                };
+                // Use the old password.
+                // $this->user->set_email((string) clean_data($data['old-email']));
+
+                // Check if first and last name is set.
+                $data['first-name'] = (!empty($data['first-name'])) ? clean_data($data['first-name']) : '';
+                $data['last-name'] = (!empty($data['last-name'])) ? clean_data($data['last-name']) : '';
+
+                // Set full name.
+                $data['full-name'] = $data['first-name'] . ' ' . $data['last-name'];
+
+                $user_info->set_id((int) clean_data($data['id']));
+                $user_info->set_full_name((string) clean_data($data['full-name']));
+                $user_info->set_website((string) clean_data($data['website']));
+                $user_info->set_bio((string) clean_data($data['bio']));
+
+                if ($user_info->has_data()) {
+                    if (
+                        $user_info->update() &&
+                        $this->user->change_password() &&
+                        $this->user->change_status() &&
+                        $this->user->change_role()
+                    ) {
+                        $this->response->error = false;
+                        $this->response->message = 'Updated Successfully.';
+                        $this->response->type = '';
+                        $this->response->filled_data = [
+                            'id' => $data['id'],
+                            'first_name' => $data['first-name'],
+                            'last_name' => $data['last-name'],
+                            'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
+                            'website' => $data['website'],
+                            'status' => $data['status'],
+                            'user_role' => $data['user_role'],
+                            'bio' => $data['bio']
+                        ];
+                    }
+                } else {
+                    if (
+                        $user_info->save() &&
+                        $this->user->change_password() &&
+                        $this->user->change_status() &&
+                        $this->user->change_role()
+                    ) {
+                        $this->response->error = false;
+                        $this->response->message = 'Updated Successfully.';
+                        $this->response->type = '';
+                        $this->response->filled_data = [
+                            'id' => $data['id'],
+                            'first_name' => $data['first-name'],
+                            'last_name' => $data['last-name'],
+                            'email' => (empty($data['new-email'])) ? $data['old-email'] : $data['new-email'],
+                            'website' => $data['website'],
+                            'status' => $data['status'],
+                            'user_role' => $data['user_role'],
+                            'bio' => $data['bio']
+                        ];
+                    }
+                }
             }
         }
 

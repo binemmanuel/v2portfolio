@@ -8,5 +8,6 @@
         "plaintext",
         "html",
         "php"
-    ]
+    ],
+    "liveServer.settings.port": 5501
 }

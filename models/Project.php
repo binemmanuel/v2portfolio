@@ -75,6 +75,42 @@ class Project extends BaseModel
         return $this->response;
     }
 
+    public function delete(array $data): object
+    {
+        // Sanitize the project's ID.
+        $this->project->id = (int) clean_data($data['id']);
+
+        // Delete the project.
+        $this->project->delete();
+
+        // Prepare a response.
+        $this->response->error = false;
+        $this->response->message = 'Deleted successfully';
+        $this->response->type = null;
+        $this->response->filled_data = [];
+
+        // Return response.
+        return $this->response;
+    }
+
+    public function move_to_trash(int $id): bool
+    {
+        // Set project ID.
+        $this->project->id = $id;
+        $this->project->status = 'trash';
+
+        return $this->response->projects = $this->project->edit_status();
+    }
+
+    public function move_to_published(int $id): bool
+    {
+        // Set project ID.
+        $this->project->id = $id;
+        $this->project->status = 'published';
+
+        return $this->response->projects = $this->project->edit_status();
+    }
+
     public function process_data(array $data): object
     {
         if (empty($data['title'])) {

@@ -1,4 +1,5 @@
 <?php
+
 namespace portfolio;
 
 // Include our Library Class.
@@ -8,7 +9,8 @@ use stdClass;
 /**
  * User class
  */
-class User{
+class User
+{
     // Properties.
 
     /**
@@ -97,7 +99,7 @@ class User{
         string $website = NULL,
         string $bio = NULL,
         string $modified_on = NULL
-        ) {  
+    ) {
         /*
          * Store the data if they are not empty.
          */
@@ -112,12 +114,12 @@ class User{
 
         if (!empty($email))
             $this->email = clean_data($email);
-        
+
         if (!empty($user_role))
             $this->user_role = clean_data($user_role);
 
         if (!empty($active))
-           $this->active = clean_data($active);
+            $this->active = clean_data($active);
 
         if (empty($token)) {
             // Generate random nums
@@ -127,10 +129,10 @@ class User{
 
             $this->token = (string) clean_data($token);
         } else
-           $this->token = (string) clean_data($token);
+            $this->token = (string) clean_data($token);
 
         if (!empty($resetToken))
-           $this->resetToken = clean_data($resetToken);
+            $this->resetToken = clean_data($resetToken);
 
         if (!empty($createdOn))
             $this->createdOn = clean_data($createdOn);
@@ -217,12 +219,12 @@ class User{
      * 
      *  @return Bool false || true if the username already exist.
      */
-    public static function exist(string $username) : bool
+    public static function exist(string $username): bool
     {
         // Instantiate a DB object.
         $db = new Database();
-        
-		// Check connection
+
+        // Check connection
         if ($db->error)
             die("<span style='border-left: 5px solid #f00;'><strong>Error</strong>: Couldn't establish a connection." . $db->error . "</span>");
 
@@ -255,10 +257,10 @@ class User{
      *
      *  @return false || true if the email already exit.
      */
-    public static function checkEmail(string $email) : bool
+    public static function emailExist(string $email): bool
     {
         // Instantiate a DB object.
-		$db = new Database();
+        $db = new Database();
 
         // Check connection
         if ($db->error)
@@ -295,13 +297,13 @@ class User{
      */
     public static function is_active(string $username): bool
     {
-		// Instantiate a DB object.
-		$db = new Database();
+        // Instantiate a DB object.
+        $db = new Database();
 
         // Sanitize data.
         $username = clean_data($username);
 
-		// Prepare a statement.
+        // Prepare a statement.
         $sql = $db->prepare(
             'SELECT
                 active
@@ -316,7 +318,7 @@ class User{
 
         // Execute.
         $sql->execute();
-        
+
         // Bind result value.
         $sql->bind_result($account_status);
 
@@ -332,7 +334,48 @@ class User{
         return (bool) $account_status;
     }
 
-	/**
+    /**
+     *	Get the user's password from the database.
+     *
+     *	@return Array User's data.
+     */
+    public function get_password(): string
+    {
+        // Instantiate a DB object.
+        $db = new Database();
+
+        // Prepare a statement.
+        $sql = $db->prepare(
+            'SELECT
+                password
+            FROM
+                me_users
+            WHERE
+                id = ?'
+        );
+
+        // Bind Parameter.
+        $sql->bind_param('s', $this->id);
+
+        // Execute.
+        $sql->execute();
+
+        // Bind result value.
+        $sql->bind_result($password);
+
+        // Fetch data.
+        $sql->fetch();
+
+        // Close Statement.
+        $sql->close();
+
+        // Close Connections.
+        $db->close();
+
+        return $password;
+    }
+
+    /**
      * Verify the user.
      *
      * @param String The username.
@@ -342,15 +385,14 @@ class User{
     public static function verify_pass(
         string $username,
         string $password
-    )
-    {
-		// Instantiate a DB object.
-		$db = new Database();
+    ) {
+        // Instantiate a DB object.
+        $db = new Database();
 
         // Sanitize data.
         $username = clean_data($username);
 
-		// Prepare a statement.
+        // Prepare a statement.
         $sql = $db->prepare(
             'SELECT
                 id,
@@ -381,9 +423,8 @@ class User{
         $sql->fetch();
 
         if (strtolower($user_role) === 'subscriber') {
-            header('Location: '. WEB_ROOT);
+            header('Location: ' . WEB_ROOT);
             exit;
-
         } elseif (
             password_verify($password, $db_password)
 
@@ -400,15 +441,15 @@ class User{
         return false;
     }
 
-	/**
+    /**
      *	Creates the User account.
      *	
      *	@return Bool true||false.
      */
-    public function create_account() : bool 
+    public function create_account(): bool
     {
-		// Instantiate a DB object.
-		$db = new Database();
+        // Instantiate a DB object.
+        $db = new Database();
 
         // Prepare a Statement.
         $sql = $db->prepare(
@@ -433,13 +474,177 @@ class User{
             $this->token
         );
 
-		// Execute query.
+        // Execute query.
         if ($sql->execute())
             return true;
 
         // Close Statement.
         $sql->close();
-        
+
+        // Close Connection.
+        $db->close();
+
+        return false;
+    }
+
+    /**
+     *  Chenge the user's email address.
+     *  
+     *  @return Bool true||false.
+     */
+    public function change_email(): bool
+    {
+        // Instantiate a DB object.
+        $db = new Database();
+
+        // Prepare a Statement.
+        $sql = $db->prepare(
+            'UPDATE
+                me_users
+            SET
+                email = ?
+            WHERE
+                id = ?'
+        );
+
+        // Bind parameters.
+        $sql->bind_param(
+            'si',
+            $this->email,
+            $this->id
+        );
+
+        // Execute query.
+        if ($sql->execute()) {
+            return true;
+        }
+
+        // Close Statement.
+        $sql->close();
+
+        // Close Connection.
+        $db->close();
+
+        return false;
+    }
+
+    /**
+     *  Chenge the user's password.
+     *  
+     *  @return Bool true||false.
+     */
+    public function change_password(): bool
+    {
+        // Instantiate a DB object.
+        $db = new Database();
+
+        // Prepare a Statement.
+        $sql = $db->prepare(
+            'UPDATE
+                me_users
+            SET
+                password = ?
+            WHERE
+                id = ?'
+        );
+
+        // Bind parameters.
+        $sql->bind_param(
+            'si',
+            $this->password,
+            $this->id
+        );
+
+        // Execute query.
+        if ($sql->execute()) {
+            return true;
+        }
+
+        // Close Statement.
+        $sql->close();
+
+        // Close Connection.
+        $db->close();
+
+        return false;
+    }
+
+    /**
+     *  Chenge the user's role.
+     *  
+     *  @return Bool true||false.
+     */
+    public function change_role(): bool
+    {
+        // Instantiate a DB object.
+        $db = new Database();
+
+        // Prepare a Statement.
+        $sql = $db->prepare(
+            'UPDATE
+                me_users
+            SET
+                userRole = ?
+            WHERE
+                id = ?'
+        );
+
+        // Bind parameters.
+        $sql->bind_param(
+            'si',
+            $this->user_role,
+            $this->id
+        );
+
+        // Execute query.
+        if ($sql->execute()) {
+            return true;
+        }
+
+        // Close Statement.
+        $sql->close();
+
+        // Close Connection.
+        $db->close();
+
+        return false;
+    }
+
+    /**
+     *  Chenge the user's account status.
+     *  
+     *  @return Bool true||false.
+     */
+    public function change_status(): bool
+    {
+        // Instantiate a DB object.
+        $db = new Database();
+
+        // Prepare a Statement.
+        $sql = $db->prepare(
+            'UPDATE
+                me_users
+            SET
+                active = ?
+            WHERE
+                id = ?'
+        );
+
+        // Bind parameters.
+        $sql->bind_param(
+            'si',
+            $this->active,
+            $this->id
+        );
+
+        // Execute query.
+        if ($sql->execute()) {
+            return true;
+        }
+
+        // Close Statement.
+        $sql->close();
+
         // Close Connection.
         $db->close();
 
@@ -454,7 +659,7 @@ class User{
     public function update(): bool
     {
         // Instantiate a DB object.
-		$db = new Database();
+        $db = new Database();
 
         // Prepare a Statement.
         $sql = $db->prepare(
@@ -486,14 +691,14 @@ class User{
 
         // Close Statement.
         $sql->close();
-        
+
         // Close Connection.
         $db->close();
 
         return false;
     }
 
-	/**
+    /**
      * Get the list of User objects in the database.
      * 
      * @param string The in which the data would be sorted.
@@ -506,7 +711,7 @@ class User{
     {
         // Instantiate a DB object.
         $db = new Database();
-        
+
         // Initialize an array.
         $data = [];
 
@@ -630,12 +835,11 @@ class User{
                 // Create an array of arrays
                 array_push($data, $user_data);
             }
-
         }
-        
+
         // Close Statement.
         $sql->close();
-        
+
         // Close Connection.
         $db->close();
 
@@ -656,16 +860,16 @@ class User{
         $user->id = $this->id;
         $user->username = $this->username;
         $user->email = $this->email;
-        $user->full_name =$this->full_name;
-        $user->website =$this->website;
-        $user->user_role =$this->user_role;
+        $user->full_name = $this->full_name;
+        $user->website = $this->website;
+        $user->user_role = $this->user_role;
         $user->active = $this->active;
         $user->created_on = (!empty($this->created_on)) ? $this->created_on : '';
 
         return $user;
     }
 
-	/**
+    /**
      * Gets a user by ID.
      * 
      * @param Int The user's ID.
@@ -676,8 +880,8 @@ class User{
         if (empty($id))
             trigger_error("<strong>User::get()</strong>: Attempt to fetch a User object that doesn't have it's ID property set.", E_USER_ERROR);
 
-		// Instantiate a DB object.
-		$db = new Database();
+        // Instantiate a DB object.
+        $db = new Database();
 
         // Prepare a Statement.
         $sql = $db->prepare(
@@ -744,13 +948,13 @@ class User{
             $user->profile_pic = $profile_pic;
             $user->bio = $bio;
         }
-        
+
         // Close Statement.
         $sql->close();
-        
+
         // Close Connection.
         $db->close();
-        
+
         return $user;
     }
 
@@ -762,7 +966,7 @@ class User{
     public static function count_rows(string $column = NULL): int
     {
         // Instantiate a DB object.
-		$db = new Database();
+        $db = new Database();
 
         // Store column name.
         $column = (string) clean_data($column);
@@ -797,7 +1001,7 @@ class User{
         $db->close();
     }
 
-     /**
+    /**
      *  The method that changes user's status (active).
      *  
      *  @param  int The ID of the user object we want to activate || deactivate.
@@ -808,7 +1012,7 @@ class User{
     public static function change_acc_status(int $id, int $status): int
     {
         // Instantiate a DB object.
-		$db = new Database();
+        $db = new Database();
 
         // Sanitize data.
         $id = (int) clean_data($id);
@@ -837,9 +1041,9 @@ class User{
     public static function search(string $keyword)
     {
         // Instantiate a DB object.
-		$db = new Database();
+        $db = new Database();
 
-        $keyword = clean_data('%'. $keyword .'%');
+        $keyword = clean_data('%' . $keyword . '%');
 
         // Prepare a statement.
         $sql = $db->prepare(
@@ -906,10 +1110,10 @@ class User{
 
         // Close Statement.
         $sql->close();
-        
+
         // close connection.
         $db->close();
-        
+
         return $data;
     }
 
@@ -923,7 +1127,7 @@ class User{
     public static function delete(int $id): bool
     {
         // Instantiate a DB object.
-		$db = new Database();
+        $db = new Database();
 
         if (empty($id))
             trigger_error("<strong>User::delete()</strong>: Attempt to delete a User object that doesn't have it's ID property set.", E_USER_ERROR);
@@ -940,7 +1144,7 @@ class User{
         // Execute.
         if ($sql->execute())
             return true;
-        
+
         else
             die($sql->error);
 

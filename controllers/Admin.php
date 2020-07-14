@@ -1,4 +1,5 @@
 <?php
+
 namespace controller;
 
 use model\Category;
@@ -31,7 +32,7 @@ class Admin extends BaseController
         $this->login_token = new LoginToken;
 
         if (!is_logged_in() || !$this->login_token->is_valid($_COOKIE['login-token'])) {
-            header('Location: '. WEB_ROOT . 'login/');
+            header('Location: ' . WEB_ROOT . 'login/');
             exit;
         }
     }
@@ -40,7 +41,7 @@ class Admin extends BaseController
     {
         $this->view->render('/', $this->admin_template);
     }
-    
+
     /** 
      * This method is responsibe for handling all
      * projects, tags and categories related stuffs 
@@ -52,8 +53,7 @@ class Admin extends BaseController
     public function projects(
         string $action = null,
         int $id = null
-    ): void
-    {
+    ): void {
         // switch based on an action.
         switch ($action) {
             case 'search':
@@ -74,11 +74,11 @@ class Admin extends BaseController
                     $this->view->response = $model->search($_POST);
 
                     // Render a projects page.
-                    $this->view->load('search-projects', $this->admin_template);
+                    $this->view->render('search-projects', $this->admin_template);
                 } else {
                     // Return a response to the view.
                     $this->view->response = $model->search($_POST);
-                    
+
                     // Render a projects page.
                     $this->view->render('projects', $this->admin_template);
                 }
@@ -103,40 +103,40 @@ class Admin extends BaseController
 
                 // Return a response to the view.
                 $this->view->categories = $model->get_all();
-                
+
                 // Render a category page.
                 $this->view->render('category', $this->admin_template);
 
                 break;
-                
+
             case 'tags':
                 // Instantiate a Tag Object.
                 $this->model = new Tag;
-                
+
                 // Sanitize the tag's ID.
                 $this->id = (int) clean_data($id);
-                
+
                 // Instantiate a Tag Model Object.
                 $model = (new $this->model);
-                
+
                 // Return a response to the view.
                 $this->view->response = $model->get($this->id);
-                
+
                 // Render a tag page.
                 $this->view->render('tags', $this->admin_template);
 
                 break;
-            
+
             case 'add-new':
                 // Instantiate a Project Object.
                 $this->model = new Project;
-                
+
                 // Sanitize the projects's ID.
                 $this->id = (int) clean_data($id);
-                
+
                 // Instantiate a Project Model Object.
                 $model = (new $this->model);
-                
+
                 // Check if a new Project was posted.
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Return a response to the view.
@@ -145,7 +145,7 @@ class Admin extends BaseController
                     // Empty $_POST.
                     unset($_POST);
                 }
-                
+
                 // Render an add new project page.
                 $this->view->render('project-form', $this->admin_template);
 
@@ -154,10 +154,10 @@ class Admin extends BaseController
             case 'edit':
                 // Instantiate a Project Object.
                 $this->model = new Project;
-                
+
                 // Sanitize the projects's ID.
                 $this->id = (int) clean_data($id);
-                
+
                 // Instantiate a Project Model Object.
                 $model = (new $this->model);
 
@@ -165,7 +165,6 @@ class Admin extends BaseController
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Return a response to the view.
                     $this->view->response = $model->update($_POST);
-                    
                 } else {
                     // Return a response to the view.
                     $this->view->response = $model->get($this->id);
@@ -175,14 +174,14 @@ class Admin extends BaseController
                 $this->view->render('project-form', $this->admin_template);
 
                 break;
-            
+
             case 'published':
                 // Instantiate a Project Object.
                 $this->model = new Project;
-                
+
                 // Sanitize the projects's ID.
                 $this->id = (int) clean_data($id);
-                
+
                 // Instantiate a Project Model Object.
                 $model = (new $this->model);
 
@@ -196,10 +195,10 @@ class Admin extends BaseController
             case 'trash':
                 // Instantiate a Project Object.
                 $this->model = new Project;
-                
+
                 // Sanitize the projects's ID.
                 $this->id = (int) clean_data($id);
-                
+
                 // Instantiate a Project Model Object.
                 $model = (new $this->model);
 
@@ -210,13 +209,95 @@ class Admin extends BaseController
                 $this->view->render('projects', $this->admin_template);
                 break;
 
+            case 'delete':
+                // Instantiate a Project Object.
+                $this->model = new Project;
+
+                // Check if a file was posted for upload.
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                    // Delete the porject.
+                    $this->model->delete($_POST);
+
+                    // Return a response to the view.
+                    $this->view->response = $this->model->get();
+
+                    // Render a projects page.
+                    $this->view->render('projects', $this->admin_template);
+                }
+                break;
+
+            case 'move-to-trash':
+                // Instantiate a Project Object.
+                $this->model = new Project;
+
+                // Sanitize the projects's ID.
+                $this->id = (int) clean_data($id);
+
+                // Move the project to trash.
+                $this->model->move_to_trash($this->id);
+
+                if (!empty($_SESSION['return'])) {
+
+                    switch ($_SESSION['return']) {
+                        case 'projects':
+                            // Get all projects and send them to
+                            // the project view.
+                            $this->view->response = $this->model->get();
+
+                            // Render a projects page.
+                            // $this->view->render(
+                            //     'projects',
+                            //     $this->admin_template
+                            // );
+
+                            break;
+
+                        case 'project-form':
+                            // Get all projects and send them to
+                            // the project view.
+                            $this->view->response = $this->model->get($this->id);
+
+                            // Render a project form page.
+                            $this->view->render(
+                                'project-form',
+                                $this->admin_template
+                            );
+                            break;
+                    }
+
+                    // Unset session.
+                    unset($_SESSION);
+                }
+
+            case 'move-to-published':
+                // Instantiate a Project Object.
+                $this->model = new Project;
+
+                // Sanitize the projects's ID.
+                $this->id = (int) clean_data($id);
+
+                // Move the project to trash.
+                $this->model->move_to_published($this->id);
+
+                // Get all projects and send them to
+                // the project view.
+                // $this->view->response = $this->model->get();
+
+                // Render a project form page.
+                $this->view->render(
+                    'projects',
+                    $this->admin_template
+                );
+
+                break;
+
             case 'draft':
                 // Instantiate a Project Object.
                 $this->model = new Project;
-                
+
                 // Sanitize the projects's ID.
                 $this->id = (int) clean_data($id);
-                
+
                 // Instantiate a Project Model Object.
                 $model = (new $this->model);
 
@@ -234,7 +315,7 @@ class Admin extends BaseController
                 // Get all projects and send them to
                 // the project view.
                 $this->view->response = $model->get();
-                
+
                 // Render all projects page.
                 $this->view->render('projects', $this->admin_template);
 
@@ -245,8 +326,7 @@ class Admin extends BaseController
     public function library(
         string $action = null,
         string $id = null
-    ): void
-    {
+    ): void {
         // Instantiate a Project Object.
         $model = $this->model = new Library;
 
@@ -261,21 +341,20 @@ class Admin extends BaseController
                     !empty($_FILES)
                 ) {
                     $this->view->form_response = $model->save($_FILES);
-
                 }
-            break;
+                break;
 
             case 'delete':
                 // Check if a file was posted for upload.
-                if ($_SERVER['REQUEST_METHOD'] === 'POST')
-                {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $this->view->form_response = $model->delete($_POST);
                 }
 
+                break;
+
             case 'edit':
                 // Check if a file was posted for upload.
-                if ($_SERVER['REQUEST_METHOD'] === 'POST')
-                {
+                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $this->view->form_response = $model->edit($_POST);
                 }
 
@@ -293,32 +372,28 @@ class Admin extends BaseController
     public function testimonials(
         string $param = null,
         string $id = null
-    ): void
-    {
+    ): void {
         $this->view->render('testimonials', $this->admin_template);
     }
 
     public function comments(
         string $param = null,
         string $id = null
-    ): void
-    {
+    ): void {
         $this->view->render('comments', $this->admin_template);
     }
 
     public function chat(
         string $param = null,
         string $id = null
-    ): void
-    {
+    ): void {
         $this->view->render('chat', $this->admin_template);
     }
 
     public function users(
         string $action = null,
         string $id = null
-    ): void
-    {
+    ): void {
         // Instantiate a Category Object.
         $model = new User;
 
@@ -345,7 +420,7 @@ class Admin extends BaseController
                 } else {
                     // Return a response to the view.
                     $this->view->response = $model->search($_POST);
-                    
+
                     // Render a projects page.
                     $this->view->render('users', $this->admin_template);
                 }
@@ -362,7 +437,7 @@ class Admin extends BaseController
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $this->view->update_response = $model->update($_POST);
                 }
-        
+
                 // Render the page.
                 $this->view->render('users-form', $this->admin_template);
                 // echo bin2hex(random_bytes(5));
@@ -381,7 +456,7 @@ class Admin extends BaseController
                 // echo bin2hex(random_bytes(5));
 
                 break;
-            
+
             case 'moderators':
                 // Sanitize the category's ID.
                 $this->id = (int) clean_data($id);
@@ -394,7 +469,7 @@ class Admin extends BaseController
                 // echo bin2hex(random_bytes(5));
 
                 break;
-            
+
             case 'subscribers':
                 // Sanitize the category's ID.
                 $this->id = (int) clean_data($id);
@@ -411,7 +486,7 @@ class Admin extends BaseController
             default:
                 // Get all users.
                 $this->view->response = $model->get();
-        
+
                 // Render the page.
                 $this->view->render('users', $this->admin_template);
 
@@ -422,8 +497,7 @@ class Admin extends BaseController
     public function settings(
         string $action = null,
         string $id = null
-    ): void
-    {
+    ): void {
         // Instantiate a Category Object.
         $info = new SiteInfo();
 
@@ -448,6 +522,6 @@ class Admin extends BaseController
 
     public function not_found(): void
     {
-		  $this->view->render('404', $this->admin_template);
+        $this->view->render('404', $this->admin_template);
     }
 }

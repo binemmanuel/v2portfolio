@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template file for displaying the add new project
  * page for the Admin theme.
@@ -15,56 +16,46 @@ use model\Category;
 use portfolio\Category as PortfolioCategory;
 
 use function portfolio\clean_data;
+
+// Store return page.
+$_SESSION['return'] = 'project-form';
 ?>
 
 <!-- .flexbox .cta-btn-flex -->
 <div class="flexbox cta-btn-flex">
-    <?php if (!empty($this->response->project) || !empty($this->response)): // Check if there is a response. ?>
+    <?php if (!empty($this->response->project) || !empty($this->response)) : // Check if there is a response. 
+    ?>
         <?php $response = (!empty($this->response->project)) ? $this->response->project : $this->response; ?>
         <h1>Edit Project</h1>
-    
-    <?php else: ?>
+
+    <?php else : ?>
         <h1>Add New Project</h1>
-        
+
     <?php endif ?>
 </div>
 <!-- .flexbox .cta-btn-flex /-->
 
 <!-- .add-project-panel -->
 <section class="add-project-panel">
-    <?php if (!empty($response->error)): ?>
+    <?php if (!empty($response->error)) : ?>
         <p class="alert alert-error" style="margin-top: 5.5rem"> <?= $response->message ?></p>
 
-    <?php elseif (!empty($response->message)): ?>
+    <?php elseif (!empty($response->message)) : ?>
         <p class="alert alert-success" style="margin-top: 5.5rem"> <?= $response->message ?></p>
 
     <?php endif ?>
 
-    <form method="post"
-        <?php if (empty($response->id)): ?>
-            action="add-new"
-
-        <?php else: ?>
-            action="<?= WEB_ROOT ?>admin/projects/edit/<?= $response->id ?>"
-        
-        <?php endif ?>>
+    <form method="post" <?php if (empty($response->id)) : ?> action="add-new" <?php else : ?> action="<?= WEB_ROOT ?>admin/projects/edit/<?= $response->id ?>" <?php endif ?>>
         <div class="form">
             <!-- .form-input -->
             <div class="form-input">
-                <input type="text" name="title" placeholder="Enter title here"
-                <?php if (!empty($response->filled_data['title'])): ?>
-                    value="<?= $response->filled_data['title'] ?>"
-
-                <?php elseif (!empty($response->title)): ?>
-                    value="<?= $response->title ?>"
-
-                <?php endif ?>/>
+                <input type="text" name="title" placeholder="Enter title here" <?php if (!empty($response->filled_data['title'])) : ?> value="<?= $response->filled_data['title'] ?>" <?php elseif (!empty($response->title)) : ?> value="<?= $response->title ?>" <?php endif ?> />
             </div>
             <!-- .form-input /-->
 
             <!-- .form-input -->
             <div class="form-input">
-                <textarea id="description" name="description" cols="30" rows="10"  onkeydown="count_desc(description, count)"><?php if (!empty($response->filled_data['description'])): ?><?= $response->filled_data['description'] ?><?php elseif (!empty($response->content)): ?><?= $response->content?><?php endif ?></textarea>
+                <textarea id="description" name="description" cols="30" rows="10" onkeydown="count_desc(description, count)"><?php if (!empty($response->filled_data['description'])) : ?><?= $response->filled_data['description'] ?><?php elseif (!empty($response->content)) : ?><?= $response->content ?><?php endif ?></textarea>
             </div>
             <!-- .form-input /-->
 
@@ -79,12 +70,26 @@ use function portfolio\clean_data;
 
                 <!-- .sidebar-panel-content -->
                 <div class="sidebar-panel-content flexbox">
-                    <a href="">Move to Trash</a>
+                    <!-- <?php if (
+                                !empty($response->status) &&
+                                $response->status === 'published'
+                            ) : ?>
+                        <a href="<?= WEB_ROOT ?>admin/projects/move-to-trash/<?= $response->id ?>" class="color-red">Move to Trash</a>
 
-                    <?php if (empty($response->id)): ?>
+                    <?php else : ?>
+                        <a href="<?= WEB_ROOT ?>admin/projects/delete/<?= $response->id ?>" class="color-red">Delete</a>
+
+                    <?php endif ?> -->
+                    <!-- <select name="move-to">
+                        <option value="trash">Trash</option>
+                        <option value="published">Publish</option>
+                        <option value="delete">Delete</option>
+                    </select> -->
+
+                    <?php if (empty($response->id)) : ?>
                         <input type="submit" name="status" value="Publish" class="btn btn-body" />
-                      
-                    <?php else: ?>
+
+                    <?php else : ?>
                         <input type="hidden" name="id" value="<?= $response->id ?>" />
                         <input type="submit" name="status" value="Update" class="btn btn-body" />
 
@@ -97,7 +102,7 @@ use function portfolio\clean_data;
             <!-- .side-bar-panel -->
             <div class="side-bar-panel">
                 <h2>Category</h2>
-                
+
                 <?php
                 // Instantiate a Category Object.
                 $category = new Category();
@@ -109,37 +114,24 @@ use function portfolio\clean_data;
                     $projects_category = new PortfolioCategory();
 
                     $projects_categories = $projects_category->get_project_cat($response->id);
-                    
+
                     // Instantiate an empty array.
                     $projects_cats = [];
 
                     foreach ($projects_categories as $projects_category) {
                         // Get all the categories the project belongs to.
                         array_push($projects_cats, $category->get($projects_category->id)->name);
-                                
                     }
                 }
                 ?>
 
                 <!-- .sidebar-panel-content -->
                 <div class="sidebar-panel-content list-categories">
-                    <?php foreach ($categories as $category): ?>
+                    <?php foreach ($categories as $category) : ?>
                         <div>
-                            <input
-                                type="checkbox"
-                                name="categories[]"
-                                value="<?= strtolower($category->name) ?>"
-                                class="text-capitalize"
+                            <input type="checkbox" name="categories[]" value="<?= strtolower($category->name) ?>" class="text-capitalize" <?php if (!empty($projects_cats)) : ?> <?php foreach ($projects_cats as $projects_cat) : ?> <?php if ($category->name === $projects_cat) : ?> checked <?php endif ?> <?php endforeach ?> <?php endif ?> />
 
-                                <?php if (!empty($projects_cats)): ?>
-                                    <?php foreach ($projects_cats as $projects_cat): ?>
-                                        <?php if ($category->name === $projects_cat): ?>
-                                            checked
-                                        <?php endif ?>
-                                    <?php endforeach ?>
-                                <?php endif ?>/>
-                                
-                                <?= $category->name ?>
+                            <?= $category->name ?>
                         </div>
                     <?php endforeach ?>
                 </div>
@@ -151,29 +143,24 @@ use function portfolio\clean_data;
             <div class="side-bar-panel">
                 <h2>Featured Image</h2>
 
-                <?php if (!empty($response->filled_data['featured-image']) &&
-                    filter_var($response->filled_data['featured-image'], FILTER_VALIDATE_URL)): ?>
+                <?php if (
+                    !empty($response->filled_data['featured-image']) &&
+                    filter_var($response->filled_data['featured-image'], FILTER_VALIDATE_URL)
+                ) : ?>
                     <div class="feature-image">
                         <img src="<?= $response->filled_data['featured-image'] ?>" alt="feature image">
                     </div>
 
-                <?php elseif (!empty($response->featured_image)): ?>
+                <?php elseif (!empty($response->featured_image)) : ?>
                     <div class="feature-image">
-                        <img src="<?=$response->featured_image ?>" alt="feature image">
+                        <img src="<?= $response->featured_image ?>" alt="feature image">
                     </div>
 
                 <?php endif ?>
 
                 <!-- .sidebar-panel-content -->
                 <div class="sidebar-panel-content">
-                    <input type="text" name="featured-image" placeholder="Paste image link here"
-                    <?php if (!empty($response->filled_data['featured-image'])): ?>
-                        value="<?= $response->filled_data['featured-image'] ?>"
-
-                    <?php elseif (!empty($response->featured_image)): ?>
-                        value="<?= $response->featured_image ?>"
-
-                    <?php endif ?> />
+                    <input type="text" name="featured-image" placeholder="Paste image link here" <?php if (!empty($response->filled_data['featured-image'])) : ?> value="<?= $response->filled_data['featured-image'] ?>" <?php elseif (!empty($response->featured_image)) : ?> value="<?= $response->featured_image ?>" <?php endif ?> />
                 </div>
                 <!-- .sidebar-panel-content /-->
             </div>
@@ -182,24 +169,16 @@ use function portfolio\clean_data;
             <!-- .side-bar-panel -->
             <div class="side-bar-panel">
                 <h2>Comment Setting</h2>
-                
+
                 <!-- .sidebar-panel-content -->
                 <div class="sidebar-panel-content">
-                    <input type="checkbox" name="comments" 
-                    
-                    <?php if (
-                        !empty($response->filled_data['comment']) &&
-                        $response->filled_data['comment'] !== 'close'
-                    ): ?>
-                        checked
-
-                    <?php elseif (
-                        !empty($response->comment_status) &&
-                        $response->comment_status !== 'close'
-                    ): ?>
-                        checked
-
-                    <?php endif ?>/>
+                    <input type="checkbox" name="comments" <?php if (
+                                                                !empty($response->filled_data['comment']) &&
+                                                                $response->filled_data['comment'] !== 'close'
+                                                            ) : ?> checked <?php elseif (
+                                                                            !empty($response->comment_status) &&
+                                                                            $response->comment_status !== 'close'
+                                                                        ) : ?> checked <?php endif ?> />
 
                     <span>Open project to comments</span>
                 </div>
@@ -215,10 +194,10 @@ use function portfolio\clean_data;
 <script>
     let description = document.querySelector('#description')
     let word_count = document.querySelector('#count')
-    
+
     setInterval(() => {
         count_desc(description, word_count)
-        
+
     }, 1000)
 
     function count_desc(description, word_count) {
@@ -227,11 +206,11 @@ use function portfolio\clean_data;
         let word_list = []
 
         words.forEach(word => {
-            if (word !== ''){
+            if (word !== '') {
                 word_list.push(word)
             }
         })
-        
+
         word_count.innerText = word_list.length
     }
 </script>

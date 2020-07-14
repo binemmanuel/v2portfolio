@@ -15,233 +15,233 @@ License version 2.0 (http://www.gnu.org/licenses/gpl-2.0.html)
 /* Global Styles */
 *,
 *::before,
-*::after{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-:root{
-    --main-font: 'Herr Von Muellerhoff', cursive;
-    --secondary-font: 'Source Sans Pro', sans-serif;
-    --body-font: 'Cabin Condensed', sans-serif;
-    --main-color: rgba(35, 41, 47, 0.856);
-    --main-link-color: rgb(0, 124, 186);
-    --primary-color: rgba(35, 41, 47, 0.972);
-    --secondary-color: #FFB966;
-    --body-color: #515151;
+:root {
+  --main-font: "Herr Von Muellerhoff", cursive;
+  --secondary-font: "Source Sans Pro", sans-serif;
+  --body-font: "Cabin Condensed", sans-serif;
+  --main-color: rgba(35, 41, 47, 0.856);
+  --main-link-color: rgb(0, 124, 186);
+  --primary-color: rgba(35, 41, 47, 0.972);
+  --secondary-color: #ffb966;
+  --body-color: #515151;
 }
-html{
-    font-family: var(--body-font);
-    font-size: 10px;
-    background: rgba(219, 219, 219, 0.335);
-    color: var(--body-color);
-    scroll-behavior: smooth;
+html {
+  font-family: var(--body-font);
+  font-size: 10px;
+  background: rgba(219, 219, 219, 0.335);
+  color: var(--body-color);
+  scroll-behavior: smooth;
 }
-pre{
-    font-size: 1.5rem;
+pre {
+  font-size: 1.5rem;
 }
-section{
-    margin: 0;
+section {
+  margin: 0;
 }
-main{
-    font-size: 1.9rem;
+main {
+  font-size: 1.9rem;
 }
-img{
-    width: 100%;
-    max-width: 100%;
+img {
+  width: 100%;
+  max-width: 100%;
 }
-a{
-    text-decoration: none;
-    color: rgb(17, 46, 78);
-    font-size: 1.5rem;
+a {
+  text-decoration: none;
+  color: rgb(17, 46, 78);
+  font-size: 1.5rem;
 }
 a:hover,
-a:active{
-    text-decoration: underline;
-    color: rgb(17, 46, 78);
+a:active {
+  text-decoration: underline;
+  color: rgb(17, 46, 78);
 }
-p{
-    font-size: 1.6rem;
+p {
+  font-size: 1.6rem;
 }
 select,
-option{
-    text-transform: capitalize;
+option {
+  text-transform: capitalize;
 }
-.alert{
-    width: 100%;
+.alert {
+  width: 100%;
 }
 .alert-success,
-.alert-error{
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    border-radius: .5rem;
-    color: rgb(241, 241, 241);
+.alert-error {
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  color: rgb(241, 241, 241);
 }
-.alert-error{
-    background: rgba(255, 0, 0, 0.411);
-    border-left: .5rem solid rgb(255, 0, 0);
-    box-shadow: 2px 2px 8px rgba(255, 0, 0, 0.363);
+.alert-error {
+  background: rgba(255, 0, 0, 0.411);
+  border-left: 0.5rem solid rgb(255, 0, 0);
+  box-shadow: 2px 2px 8px rgba(255, 0, 0, 0.363);
 }
-.alert-success{
-    background: rgb(94 176 2 / 94%);
-    border-left: .5rem solid rgb(58, 108, 0);
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.36);
+.alert-success {
+  background: rgb(94 176 2 / 94%);
+  border-left: 0.5rem solid rgb(58, 108, 0);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.36);
 }
-.alert-success .alert-link{
-    color: rgb(41, 77, 0);
+.alert-success .alert-link {
+  color: rgb(41, 77, 0);
 }
-.alert-error .alert-link{
-    color: rgb(190, 0, 0);
+.alert-error .alert-link {
+  color: rgb(190, 0, 0);
 }
-.text-left{
-    text-align: left;
+.text-left {
+  text-align: left;
 }
-.text-right{
-    text-align: right;
+.text-right {
+  text-align: right;
 }
-.text-center{
-    text-align: center;
+.text-center {
+  text-align: center;
 }
-.text-justify{
-    text-align: justify;
+.text-justify {
+  text-align: justify;
 }
-.btn-container{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: .5rem;
+.btn-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem;
 }
-.btn{
-    display: inline-block;
-    font-weight: 400;
-    font-size: 2rem;
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-    user-select: none;
-    border: .10rem solid transparent;
-    padding: .5rem 1rem;
-    border-radius: .5rem;
-    line-height: 1.5;
-    outline: none;
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  font-size: 2rem;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  user-select: none;
+  border: 0.1rem solid transparent;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  line-height: 1.5;
+  outline: none;
 }
-.btn-main{
-    background: rgb(17 46 78);
-    color: rgb(255, 255, 255);
-    border: .1rem solid rgb(17 46 78 /51%);
-    width: -webkit-max-content;
-    width: -moz-max-content;
-    width: fit-content;
-    outline: none;
+.btn-main {
+  background: rgb(17 46 78);
+  color: rgb(255, 255, 255);
+  border: 0.1rem solid rgb(17 46 78 /51%);
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: fit-content;
+  outline: none;
 }
 .btn-main:hover,
-.btn-main:active{
-    box-shadow: 0 0 0 .3rem rgb(17 46 78 /51%);
+.btn-main:active {
+  box-shadow: 0 0 0 0.3rem rgb(17 46 78 /51%);
 }
 
 /* Login Form */
-.logo{
-    margin-bottom: 3.5rem;
+.logo {
+  margin-bottom: 3.5rem;
 }
-.logo img{
-    border-radius: .9rem;
-    box-shadow: .2rem .2rem .8rem;
+.logo img {
+  border-radius: 0.9rem;
+  box-shadow: 0.2rem 0.2rem 0.8rem;
 }
-.form-container{
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 15rem 0;
-    width: 100%;
-    height: 100%;
+.form-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 15rem 0;
+  width: 100%;
+  height: 100%;
 }
-.form-container form{
-    width: 90vw;
-    overflow: hidden;
+.form-container form {
+  width: 90vw;
+  overflow: hidden;
 }
-.form-input{
-    position: relative;
-    margin-bottom: 2.5rem;
-    display: block;
-    width: 100%;
-    padding: 1rem 0 .5rem 0;
-    font-size: 2rem;
-    line-height: 1.5;
-    color: rgb(17 46 78);
-    background: rgb(255, 255, 255);
-    border: 1.9px solid transparent;
-    border-bottom: 5px solid rgb(17 46 78 /30%);
-    border-radius: .5rem;
+.form-input {
+  position: relative;
+  margin-bottom: 2.5rem;
+  display: block;
+  width: 100%;
+  padding: 1rem 0 0.5rem 0;
+  font-size: 2rem;
+  line-height: 1.5;
+  color: rgb(17 46 78);
+  background: rgb(255, 255, 255);
+  border: 1.9px solid transparent;
+  border-bottom: 5px solid rgb(17 46 78 /30%);
+  border-radius: 0.5rem;
 }
-.form-input .label{
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    padding-top: 0;
-    height: 100%;
-    color: rgb(170, 170, 170);
-    transition: transform .15s ease-in-out;
-    pointer-events: none;
+.form-input .label {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding-top: 0;
+  height: 100%;
+  color: rgb(170, 170, 170);
+  transition: transform 0.15s ease-in-out;
+  pointer-events: none;
 }
 .form-input .label:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 7rem;
-    border-bottom: 5px solid rgb(17 46 78 /51%);
-    transition: transform .4s ease;
-    transform: translateY(5px) translateX(-101%);
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 7rem;
+  border-bottom: 5px solid rgb(17 46 78 /51%);
+  transition: transform 0.4s ease;
+  transform: translateY(5px) translateX(-101%);
 }
-.form-input .label-text{
-    position: absolute;
-    top: .7rem;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    font-size: 2rem;
-    text-transform: capitalize;
-    padding: 0rem .4rem;
-    line-height: 0.5;
-    display: block;
-    transform: translateY(50%);
-    transition: all .4s ease;
-    pointer-events: none;
+.form-input .label-text {
+  position: absolute;
+  top: 0.7rem;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  text-transform: capitalize;
+  padding: 0rem 0.4rem;
+  line-height: 0.5;
+  display: block;
+  transform: translateY(50%);
+  transition: all 0.4s ease;
+  pointer-events: none;
 }
 .form-input select:focus + .label .label-text,
 .form-input select:valid + .label .label-text,
 .form-input input:focus + .label .label-text,
-.form-input input:valid + .label .label-text{
-    color: rgb(17, 46, 78);
-    transform: translateY(0);
-    font-size: 1.5rem;
+.form-input input:valid + .label .label-text {
+  color: rgb(17, 46, 78);
+  transform: translateY(0);
+  font-size: 1.5rem;
 }
 .form-input select:focus + .label::before,
 .form-input select:valid + .label::before,
 .form-input input:focus + .label::before,
-.form-input input:valid + .label::before{
-    transform: translateY(5px) translateX(0);
+.form-input input:valid + .label::before {
+  transform: translateY(5px) translateX(0);
 }
 .form-input select,
-.form-input input{
-    background: transparent;
-    color: rgb(17, 46, 78);
-    font-size: inherit;
-    padding: .5rem .4rem;
-    width: 100%;
-    border: none;
-    outline: none;
-    transform: translateY(20%);
+.form-input input {
+  background: transparent;
+  color: rgb(17, 46, 78);
+  font-size: inherit;
+  padding: 0.5rem 0.4rem;
+  width: 100%;
+  border: none;
+  outline: none;
+  transform: translateY(20%);
 }
 /* Login Form Ends */
 
 /* Large Screens */
 @media screen and (min-width: 900px) {
-    .form-container form{
-        width: 40rem;
-    }
+  .form-container form {
+    width: 40rem;
+  }
 }

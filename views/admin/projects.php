@@ -17,6 +17,10 @@ $projects = $this->response->projects;
 
 // Number of projects
 $count = $this->response->counts;
+
+// Store return page.
+$_SESSION['return'] = 'projects';
+
 ?>
 
 <!-- .flexbox .cta-btn-flex -->
@@ -86,7 +90,20 @@ $count = $this->response->counts;
                                     <a href="<?= WEB_ROOT ?>home#<?= $project->id ?>" target="__blank">View</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?= WEB_ROOT ?>admin/projects/delete/<?= $project->id ?>" class="color-red">Delete</a>
+                                    <?php if ($project->status !== 'trash'): ?>
+                                        <a href="<?= WEB_ROOT ?>admin/projects/move-to-trash/<?= $project->id ?>" class="color-red">Move to Trash</a>
+
+                                    <?php else: ?>
+                                        <a
+                                            class="color-red"
+                                            onclick="delete_project_modal(
+                                                '<?= $project->id ?>',
+
+                                            )">Delete</a>
+
+                                        <a href="<?= WEB_ROOT ?>admin/projects/move-to-published/<?= $project->id ?>" class="color-active">Plublish</a>
+
+                                    <?php endif ?>
                                 </li>
                             </ul>
                         </div>
@@ -116,6 +133,35 @@ $count = $this->response->counts;
 </section>
 <!-- .projects-panel /-->
 
+<!-- delete-modal -->
+<div class="delete-modal">
+    <form id="delete_modal_form" action="<?= WEB_ROOT ?>admin/projects/delete/" method="post">
+        <input type="text" name='id' id="object_id" />
+
+        <!-- .delete-modal-header .close-btn -->
+        <div class="delete-modal-header close-btn">
+            <h2>Delete File</h2>
+            <i class="fa fa-times"></i>
+        </div>
+        <!-- .delete-modal-header .close-btn /-->
+
+        <!-- .delete-modal-body -->
+        <div class="delete-modal-body">
+            <p>Are you sure you want to permanently delete the project?</p>
+        </div>
+        <!-- .delete-modal-body /-->
+
+        <!-- .delete-modal-footer -->
+        <div class="delete-modal-footer">
+            <input class="btn close-btn btn-secondary" type="submit" value="No" />
+            <input class="btn text-danger" type="submit" value="Permanently Delete" />
+        </div>
+        <!-- .delete-modal-footer /-->
+    </form>
+</div>
+<!-- delete-modal /-->
+
+
 <script>
     window.onload = () => {
         const search_bar = $('#search-bar')
@@ -123,7 +169,7 @@ $count = $this->response->counts;
         search_bar.addEventListener('keyup', (event) => {
             let keyword = search_bar.value
         
-            const ajax = Ajax(
+            const ajax = new Ajax(
                 'post',
                 '<?= WEB_ROOT ?>/admin/projects/search',
                 '#search-result',

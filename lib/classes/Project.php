@@ -440,38 +440,6 @@ class Project
 	}
 
 	/**
-	 *  Get the total number of rows a.
-	 *  
-	 *  @return int The number of a specific column || 0.
-	 */
-	/*public static function count_rows(string $column): int
-	{
-		// Instantiate a DB object.
-		$db = new Database();
-
-		// Prepare a Statement.
-		$stmt = $db->prepare('SELECT COUNT(*) as total_rows FROM me_project');
-
-		// Execute Query.
-		if ($stmt->execute()) {
-			// Bind the result to a variable.
-			$stmt->bind_result($total);
-
-			if ($stmt->fetch()) {
-				return $total;
-			};
-		}
-
-		return 0;
-
-		// Close Statement.
-		$stmt->close();
-
-		// Close dbection.
-		$db->close();
-	}*/
-
-	/**
 	 *	Inserts the current object into the database.
 	 *	
 	 *	@return false || true if the Project object was inserted into the database successfully.
@@ -610,9 +578,48 @@ class Project
 	}
 
 	/**
-	 *	Inserts the current object into the database.
+	 *	Deletes a project.
 	 *	
-	 *	@return false || true if the Project object was updated successfully.
+	 *	@return Bool false || true if the Project was updated successfully.
+	 */
+	public function delete(): bool
+	{
+		if (empty($this->id))
+			trigger_error('<strong>Project::update()</strong> Attempt to delete a Project object that doestn\'t have it\'s ID property set.', E_USER_ERROR);
+
+		// Instantiate a DB object.
+		$db = new Database();
+
+		// Prepare a Statement.
+		$stmt = $db->prepare(
+			'DELETE FROM
+				me_project
+			WHERE
+				id = ?'
+		);
+
+		// Bind Parameters.
+		$stmt->bind_param('i', $this->id);
+		
+		// Execute.
+		if ($stmt->execute()) {
+			return true;
+		}
+
+		// Return false by default.
+		return false;
+
+		// Close Statement.
+		$stmt->close();
+
+		// Close dbection.
+		$db->close();
+	}
+
+	/**
+	 *	
+	 *	
+	 *	@return false || true if the Project was updated successfully.
 	 */
 	public function edit_status(): bool
 	{
