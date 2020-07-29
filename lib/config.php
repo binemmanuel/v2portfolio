@@ -39,13 +39,13 @@ require 'functions.php';
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database */
-define('DB_NAME', 'portfolio');
+define('DB_NAME', '');
 
 /** MySQL database username */
-define('DB_USER', 'binemmanuel');
+define('DB_USER', '');
 
 /** MySQL database password */
-define('DB_PASSWORD', 'SMARTlogin89');
+define('DB_PASSWORD', '');
 
 /** MySQL hostname */
 define('DB_SERVER', 'localhost');
@@ -78,10 +78,10 @@ define('ZIP_PATH', UPLOAD_DIR .'zips'. DIRECTORY_SEPARATOR);
 define('OTHER_FILES_PATH', UPLOAD_DIR .'other-files'. DIRECTORY_SEPARATOR);
 
 /** Mail configurations */
-define('SMTP_HOST', 'mail.binemmanuel.com');
+define('SMTP_HOST', '');
 define('SMTP_DEBUG', false);
 define('SMTP_PORT', 26);
-define('REPLY_TO', 'me@binemmanuel.com');
-define('MAIL_USER', 'me@binemmanuel.com');
-define('MAIL_USERS_NAME', 'Bin Emmanuel');
-define('MAIL_PASSWORD', 'SMARTESTlogin89');
+define('REPLY_TO', '');
+define('MAIL_USER', '');
+define('MAIL_USERS_NAME', '');
+define('MAIL_PASSWORD', '');
