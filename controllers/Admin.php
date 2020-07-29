@@ -342,6 +342,13 @@ class Admin extends BaseController
                 ) {
                     $this->view->form_response = $model->save($_FILES);
                 }
+
+                // Get all projects and send them to
+                // the project view.
+                $this->view->response = $model->get();
+
+                // Render all projects page.
+                $this->view->render('library', $this->admin_template);
                 break;
 
             case 'delete':
@@ -349,6 +356,13 @@ class Admin extends BaseController
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $this->view->form_response = $model->delete($_POST);
                 }
+
+                // Get all projects and send them to
+                // the project view.
+                $this->view->response = $model->get();
+
+                // Render all projects page.
+                $this->view->render('library', $this->admin_template);
 
                 break;
 
@@ -358,15 +372,47 @@ class Admin extends BaseController
                     $this->view->form_response = $model->edit($_POST);
                 }
 
+                // Get all projects and send them to
+                // the project view.
+                $this->view->response = $model->get();
+
+                // Render all projects page.
+                $this->view->render('library', $this->admin_template);
+
+                break;
+
+            case 'filter':
+                // FIlter data.
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    // Search for the data.
+                    $this->view->response = $model->filter($_GET);
+
+                    // Render files.
+                    $this->view->load('load-library', $this->admin_template);
+                }
+                break;
+
+            case 'search':
+                header('Content-Type: application/json');
+
+                // Get searched media.
+                $this->view->response = $model->search($_GET);
+
+                // echo json_encode($this->view->response);
+
+                // Render media page.
+                $this->view->load('load-library', $this->admin_template);
+                break;
+
+            default:
+                // Get all media and send them to
+                // the project view.
+                $this->view->response = $model->get();
+
+                // Render all media page.
+                $this->view->render('library', $this->admin_template);
                 break;
         }
-
-        // Get all projects and send them to
-        // the project view.
-        $this->view->response = $model->get();
-
-        // Render all projects page.
-        $this->view->render('library', $this->admin_template);
     }
 
     public function testimonials(

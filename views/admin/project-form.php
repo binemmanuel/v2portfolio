@@ -85,6 +85,7 @@ $_SESSION['return'] = 'project-form';
                         <option value="published">Publish</option>
                         <option value="delete">Delete</option>
                     </select> -->
+                    <div></div>
 
                     <?php if (empty($response->id)) : ?>
                         <input type="submit" name="status" value="Publish" class="btn btn-body" />

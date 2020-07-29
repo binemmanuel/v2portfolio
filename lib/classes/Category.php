@@ -1,32 +1,34 @@
 <?php
+
 namespace portfolio;
 
 /**
  * Class that handles post/project categories.
  */
-class Category {
+class Category
+{
 	// Properties.
 
 	/**
-     *  @var int The Category's ID from the database.
-     */
-    public $id;
+	 *  @var int The Category's ID from the database.
+	 */
+	public $id;
 
-    /**
-     *  @var string The name of the Category.
-     */
-    public $name;
+	/**
+	 *  @var string The name of the Category.
+	 */
+	public $name;
 
-    /**
-     *  @var string The Category's slug.
-     */
-    public $slug;
+	/**
+	 *  @var string The Category's slug.
+	 */
+	public $slug;
 
-    /**
-     *  @var string A short note about the Category.
-     */
-    public $description;
-	
+	/**
+	 *  @var string A short note about the Category.
+	 */
+	public $description;
+
 	/**
 	 * Sets the object's properties using the values in the supplied array.
 	 * 
@@ -37,8 +39,7 @@ class Category {
 		string $name = null,
 		string $slug = null,
 		string $description = null
-	)
-	{
+	) {
 		if (!empty($id))
 			$this->id = (int) clean_data($id);
 
@@ -48,7 +49,7 @@ class Category {
 		if (!empty($slug))
 			$this->slug = (string) clean_data($slug);
 
-			if (!empty($description))
+		if (!empty($description))
 			$this->description = (string) clean_data($description);
 	}
 
@@ -79,7 +80,7 @@ class Category {
 
 		// Execute query.
 		$stmt->execute();
-		
+
 		$category = new Category();
 
 		// Bind result value.
@@ -93,12 +94,12 @@ class Category {
 		// Retrieve rows.
 		if ($stmt->fetch()) {
 			// Return the data.
-			$category->id = $id ;
-			$category->name = $name ;
-			$category->slug = $slug ;
-			$category->description = $description ;
+			$category->id = $id;
+			$category->name = $name;
+			$category->slug = $slug;
+			$category->description = $description;
 		}
-				
+
 		// Close Statement.
 		$stmt->close();
 
@@ -155,7 +156,7 @@ class Category {
 			// Create an array of categories.
 			array_push($data, $category_obj);
 		}
-		
+
 		// Close Statement.
 		$stmt->close();
 
@@ -173,12 +174,11 @@ class Category {
 	 * @param Int (Optional) The number of rows to return (returns all by default).
 	 * 
 	 * @return Array A list of all categories. 
-	 */	
+	 */
 	public static function get_all(
 		int $offset,
 		int $numOfRows = 0
-	): array
-	{
+	): array {
 		// Instantiate a DB object.
 		$db = new Database();
 
@@ -235,13 +235,13 @@ class Category {
 			// Store an array of objects.
 			array_push($data, $category);
 		}
-		
+
 		// Close Statement.
 		$stmt->close();
-		
+
 		// close dbection.
 		$db->close();
-		
+
 		return $data;
 	}
 
@@ -305,7 +305,6 @@ class Category {
 
 			// Bind Parameters.
 			$stmt->bind_param('ss', $this->name, $this->slug);
-
 		} else {
 			// Prepare a Statement.
 			$stmt = $db->prepare(
@@ -321,13 +320,13 @@ class Category {
 			// Bind Parameters.
 			$stmt->bind_param('sss', $this->name, $this->slug, $this->description);
 		}
-		
+
 		// Execute.
 		$stmt->execute();
 
 		// Store return values.
 		$stmt->store_result();
-		
+
 		// Get last inserted ID
 		$last_id = $stmt->insert_id;
 
@@ -351,11 +350,10 @@ class Category {
 	public function add_project(
 		int $category,
 		int $project
-	): bool
-	{
+	): bool {
 		// Instantiate a DB object.
 		$db = new Database();
-		
+
 		// Prepare a Statement.
 		$stmt = $db->prepare(
 			'INSERT INTO
@@ -372,7 +370,7 @@ class Category {
 			$category,
 			$project
 		);
-		
+
 		// Execute.
 		if ($stmt->execute()) {
 			return true;
@@ -389,21 +387,20 @@ class Category {
 	}
 
 	/**
-     *  Check if a category already exists.
+	 *  Check if a category already exists.
 	 *	@var Int The category's ID. 
 	 *	@var Int The project's ID. 
 	 
-     *  @return Bool false || true if the category already exists.
-     */
+	 *  @return Bool false || true if the category already exists.
+	 */
 	public function is_project_added(
 		int $category,
 		int $project
-	): bool
-	{
-        // Instantiate a DB object.
+	): bool {
+		// Instantiate a DB object.
 		$db = new Database();
 
-        // Prepare a Statement.
+		// Prepare a Statement.
 		$stmt = $db->prepare(
 			'SELECT
 				id
@@ -414,33 +411,33 @@ class Category {
 			AND 
 				project = ?
 			LIMIT 1'
-	
+
 		);
 
 		// Bind Parameter.
-        $stmt->bind_param(
+		$stmt->bind_param(
 			'ii',
 			$category,
 			$project
 		);
 
-        // Execute.
+		// Execute.
 		$stmt->execute();
-		
+
 		// Bind the result value.
 		$stmt->bind_result($id);
 
-        $stmt->fetch();
+		$stmt->fetch();
 
-        // Close Statement.
-        $stmt->close();
+		// Close Statement.
+		$stmt->close();
 
-        // Close dbection.
-        $db->close();
+		// Close dbection.
+		$db->close();
 
-        return (bool) $id;
+		return (bool) $id;
 	}
-	
+
 	/**
 	 *	Deletes a project.
 	 *	
@@ -449,14 +446,13 @@ class Category {
 	public function remove_project(
 		array $cat_ids,
 		int $proejct_id
-	): bool
-	{
+	): bool {
 		// Instantiate a DB object.
 		$db = new Database();
 
 		// Query
-		$query = 
-		'DELETE FROM
+		$query =
+			'DELETE FROM
 				me_project_category
 			WHERE';
 
@@ -465,10 +461,11 @@ class Category {
 
 		if (!empty($cat_ids)) {
 			// Loop though the category IDs.
-			for ($i = 0; $i < count($cat_ids); $i++) { 
+			for ($i = 0; $i < (count($cat_ids)); $i++) {
+
 				// Sanitize the Category IDs.
 				$cat_ids[$i] = clean_data(stripslashes($cat_ids[$i]));
-				
+
 				// Add "category <> $cat_ids[$i]" to query.
 				$query .= " category <> $cat_ids[$i]";
 
@@ -476,11 +473,9 @@ class Category {
 				if ($i !== (count($cat_ids) - 1)) {
 					// Add "AND" if it's not the last $cat_ids
 					$query .= ' AND';
-					
 				} else {
 					// Add "LIMIT 1" if it's the last $cat_ids
 					$query .= " AND project = $proejct_id LIMIT 1";
-					
 				}
 			}
 		} else {
@@ -550,19 +545,19 @@ class Category {
 		// Return false by default.
 		return false;
 	}
-	
+
 	/**
-     *  Check if a category already exists.
+	 *  Check if a category already exists.
 	 *	@var String The category. 
 	 
-     *  @return false || true if the category already exists.
-     */
+	 *  @return false || true if the category already exists.
+	 */
 	public function exists(string $name): int
 	{
-        // Instantiate a DB object.
+		// Instantiate a DB object.
 		$db = new Database();
 
-        // Prepare a Statement.
+		// Prepare a Statement.
 		$stmt = $db->prepare(
 			'SELECT
 				id
@@ -571,28 +566,28 @@ class Category {
 			WHERE
 				name = ?
 			LIMIT 1'
-	
+
 		);
 
 		// Bind Parameter.
-        $stmt->bind_param('s', $name);
+		$stmt->bind_param('s', $name);
 
-        // Execute.
+		// Execute.
 		$stmt->execute();
-		
+
 		// Bind the result value.
 		$stmt->bind_result($id);
 
-        $stmt->fetch();
+		$stmt->fetch();
 
-        // Close Statement.
-        $stmt->close();
+		// Close Statement.
+		$stmt->close();
 
-        // Close dbection.
-        $db->close();
+		// Close dbection.
+		$db->close();
 
-        return (int) $id;
-    }
+		return (int) $id;
+	}
 
 	/**
 	 *	Delete the current Category object in the database.

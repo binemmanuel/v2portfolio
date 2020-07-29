@@ -161,7 +161,6 @@ $_SESSION['return'] = 'projects';
 </div>
 <!-- delete-modal /-->
 
-
 <script>
     window.onload = () => {
         const search_bar = $('#search-bar')
@@ -171,7 +170,7 @@ $_SESSION['return'] = 'projects';
         
             const ajax = new Ajax(
                 'post',
-                '<?= WEB_ROOT ?>/admin/projects/search',
+                '<?= WEB_ROOT ?>admin/projects/search',
                 '#search-result',
                 `keyword=${keyword}&async=true`
             )

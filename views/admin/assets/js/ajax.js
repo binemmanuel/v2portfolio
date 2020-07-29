@@ -1,78 +1,63 @@
 /**
  * Send an async request to a server.
- * 
- * @param String The method (POST or GET). 
- * @param String The server side application that should do the processing. 
- * @param String The element in which the data should be loaded to. 
+ *
+ * @param String The method (POST or GET).
+ * @param String The server side application that should do the processing.
+ * @param String The element in which the data should be loaded to.
  * @param String The data to be sent to the server.
- * 
+ *
  * @return Void
  */
 class Ajax extends XMLHttpRequest {
-    constructor (
-        method,
-        server,
-        element,
-        url = null
-    ) {
-        super()
+	constructor(method, server, element, url = null) {
+		super();
 
-        this.method = method
-        this.server = server
-        this.element = element
-        this.url = url
+		this.method = method;
+		this.server = server;
+		this.element = element;
+		this.url = url;
 
-        this.onreadystatechange = function () {
-            const loader = new Loader
-            if (this.readyState === 4 && this.status === 200) {
-                // Display resonse.
-                document.querySelector(element).innerHTML = this.responseText
-                
-                setTimeout(() => {
-                    // Stop loader.
-                    loader.stop()
-                }, 2000)
-            } else if (this.readyState === 3) {
-                // Display loader.
-                loader.display('.main-section')
-            }
-            
-        }
-        
-        switch (this.method.toLowerCase()) {
-            case 'post':
-                this.open(
-                    this.method,
-                    this.server,
-                    true
-                )
-    
-                this.setRequestHeader(
-                    'Content-type',
-                    'application/x-www-form-urlencoded'
-                )
-    
-                this.send(url)
-    
-    
-                break;
-        
-            default:
-                    // Create a URL if url is not empty.
-                    if (url !== null) {
-                        url = server + '?' + url
-                    }
-                    
-                    this.open(
-                        method,
-                        url,
-                        true
-                    )
-                    this.send()
-                break;
-        }
-    }
-    
+		this.onreadystatechange = function () {
+			const loader = new Loader();
+
+			if (this.readyState === 2) {
+				// Display loader.
+				loader.display(".main-section");
+			} else if (this.readyState === 4 && this.status === 200) {
+				// Display resonse.
+				document.querySelector(element).innerHTML = this.responseText;
+
+				setTimeout(() => {
+					// Stop loader.
+					loader.stop();
+				}, 2000);
+			}
+		};
+
+		switch (this.method.toLowerCase()) {
+			case "post":
+				this.open(this.method, this.server, true);
+
+				this.setRequestHeader(
+					"Content-type",
+					"application/x-www-form-urlencoded"
+				);
+
+				this.send(url);
+
+				break;
+
+			default:
+				// Create a URL if url is not empty.
+				if (url !== null) {
+					url = server + "?" + url;
+				}
+
+				this.open(method, url, true);
+				this.send();
+				break;
+		}
+	}
 }
 
 /* const Ajax = (

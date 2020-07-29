@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The portfolio section of the Default StarLyon Theme
  *
@@ -15,41 +16,41 @@
     <h2>Portfolio</h2>
 
     <!-- .portfolio-modal -->
-    <div class="portfolio-modal grid">
+    <div class="portfolio-modal flexbox">
         <img src="<?= WEB_ROOT ?>views/<?= $site_info->template ?>/assets/img/small-2.jpg" alt="" />
 
         <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?
         </p>
     </div>
     <!-- .portfolio-modal /-->
 
     <!-- .portfolio-modal -->
-    <div class="portfolio-modal grid">
-        <img src="./assets/img/small-2.jpg" alt="" />
+    <div class="portfolio-modal flexbox">
+        <img src="<?= WEB_ROOT ?>views/<?= $site_info->template ?>/assets/img/small-2.jpg" alt="" />
 
         <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?
         </p>
     </div>
     <!-- .portfolio-modal /-->
 
     <!-- .portfolio-modal -->
-    <div class="portfolio-modal grid">
+    <div class="portfolio-modal flexbox">
         <img src="<?= WEB_ROOT ?>views/<?= $site_info->template ?>/assets/img/small-2.jpg" alt="" />
 
         <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?
         </p>
     </div>
     <!-- .portfolio-modal /-->
 
     <!-- .portfolio-modal -->
-    <div class="portfolio-modal grid">
+    <div class="portfolio-modal flexbox">
         <img src="<?= WEB_ROOT ?>views/<?= $site_info->template ?>/assets/img/small-2.jpg" alt="" />
 
         <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem reprehenderit inventore quos, excepturi deleniti eum quam amet deserunt sequi praesentium molestias eligendi, necessitatibus cumque itaque?
         </p>
     </div>
     <!-- .portfolio-modal /-->

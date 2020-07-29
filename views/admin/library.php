@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template file for displaying the media page
  * for the Admin theme.
@@ -23,10 +24,10 @@ if (!empty($this->form_response)) {
 </div>
 <!-- .flexbox .cta-btn-flex /-->
 
-<?php if (!empty($form_response->error)): ?>
+<?php if (!empty($form_response->error)) : ?>
     <p class="alert alert-error" style="margin-top: 5.5rem"> <?= $form_response->message ?></p>
 
-<?php elseif (!empty($form_response->message)): ?>
+<?php elseif (!empty($form_response->message)) : ?>
     <p class="alert alert-success" style="margin-top: 5.5rem"> <?= $form_response->message ?></p>
 
 <?php endif ?>
@@ -53,11 +54,11 @@ if (!empty($this->form_response)) {
 <div class="library-header">
     <!-- .library-actions -->
     <div class="library-actions">
-        <select name="" id="">
-            <option>All media items</option>
-            <option>Images</option>
-            <option>Videos</option>
-            <option>Audios</option>
+        <select name="filter" id="filter">
+            <option value="all">All media items</option>
+            <option value="image">Images</option>
+            <option value="video">Videos</option>
+            <option value="audio">Audios</option>
         </select>
     </div>
     <!-- .library-actions /-->
@@ -65,7 +66,7 @@ if (!empty($this->form_response)) {
     <!-- .search-bar -->
     <div class="search-bar">
         <form action="" method="post">
-            <input type="search" name="keyword" placeholder="Search" />
+            <input type="search" name="keyword" id="search-bar" placeholder="Search" />
         </form>
     </div>
     <!-- .search-bar /-->
@@ -73,32 +74,27 @@ if (!empty($this->form_response)) {
 <!-- .library-header /-->
 
 <!-- .library-panel -->
-<section class="library-panel">
-    <?php foreach ($response as $media): ?>
+<section class="library-panel" id="media-files">
+    <?php foreach ($response as $media) : ?>
         <?php
         // Extract file type.
         $file_type = explode('/', $media->type);
         $file_type = $file_type[0];
         ?>
 
-        <?php if ($file_type === 'image'): ?>
+        <?php if ($file_type === 'image') : ?>
             <!-- .media-file -->
             <div class="media-file">
                 <input type="hidden" id="id-<?= $media->id ?>" value="<?= $media->id ?>" />
                 <input type="hidden" id="link-<?= $media->id ?>" value="<?= urldecode($media->link) ?>" />
-                
-                <img
-                    src="<?= WEB_ROOT . urldecode($media->link) ?>"
-                    alt="<?= $media->alt_text ?>"
-                    onclick="copy_url('<?= WEB_ROOT ?>', '#link-<?= $media->id ?>')"/>
+
+                <img src="<?= WEB_ROOT . urldecode($media->link) ?>" alt="<?= $media->alt_text ?>" onclick="copy_url('<?= WEB_ROOT ?>', '#link-<?= $media->id ?>')" />
 
                 <!-- .media-actions -->
                 <div class="media-actions">
                     <ul>
                         <!-- #activate_edit_modal -->
-                        <li class="btn btn-body"
-                            id="activate_edit_modal"
-                            onclick="edit_media_modal(
+                        <li class="btn btn-body" id="activate_edit_modal" onclick="edit_media_modal(
                                 '#id-'+ <?= $media->id ?>,
                                 '#link-'+ <?= $media->id ?>,
                                 edit_modal_form,
@@ -107,7 +103,7 @@ if (!empty($this->form_response)) {
                                     name: '<?= urldecode($media->name) ?>',
                                     alt_text: '<?= $media->alt_text ?>',
                                     description: '<?= $media->description ?>',
-                                    uploaded_by: '<?= $media->uploadedBy ?>',
+                                    uploaded_by: '<?= $media->uploaded_by ?>',
                                     type: '<?= $media->type ?>'
                                 }
                             )">
@@ -116,9 +112,7 @@ if (!empty($this->form_response)) {
                         <!-- #activate_edit_modal /-->
 
                         <!-- #activate_delete_modal -->
-                        <li class="btn btn-body btn-danger"
-                            id="activate_delete_modal"
-                            onclick="delete_media_modal(
+                        <li class="btn btn-body btn-danger" id="activate_delete_modal" onclick="delete_media_modal(
                                 '#id-<?= $media->id ?>',
                                 '#link-<?= $media->id ?>',
                                 delete_modal_form
@@ -131,24 +125,20 @@ if (!empty($this->form_response)) {
                 <!-- .media-actions /-->
             </div>
             <!-- .media-file /-->
-        
-        <?php elseif ($file_type === 'video'): ?>
+
+        <?php elseif ($file_type === 'video') : ?>
             <!-- .media-file -->
             <div class="media-file">
                 <input type="hidden" id="id-<?= $media->id ?>" value="<?= $media->id ?>" />
                 <input type="hidden" id="link-<?= $media->id ?>" value="<?= urldecode($media->link) ?>" />
-                
-                <video 
-                    src="<?= WEB_ROOT . urldecode($media->link) ?>"
-                    onclick="copy_url('<?= WEB_ROOT ?>', '#link-<?= $media->id ?>')"></video>
+
+                <video src="<?= WEB_ROOT . urldecode($media->link) ?>" onclick="copy_url('<?= WEB_ROOT ?>', '#link-<?= $media->id ?>')"></video>
 
                 <!-- .media-actions -->
                 <div class="media-actions">
                     <ul>
                         <!-- #activate_edit_modal -->
-                        <li class="btn btn-body"
-                            id="activate_edit_modal"
-                            onclick="edit_media_modal(
+                        <li class="btn btn-body" id="activate_edit_modal" onclick="edit_media_modal(
                                 '#id-'+ <?= $media->id ?>,
                                 '#link-'+ <?= $media->id ?>,
                                 edit_modal_form,
@@ -157,7 +147,7 @@ if (!empty($this->form_response)) {
                                     name: '<?= urldecode($media->name) ?>',
                                     alt_text: '<?= $media->alt_text ?>',
                                     description: '<?= $media->description ?>',
-                                    uploaded_by: '<?= $media->uploadedBy ?>',
+                                    uploaded_by: '<?= $media->uploaded_by ?>',
                                     type: '<?= $media->type ?>'
                                 }
                             )">
@@ -166,9 +156,7 @@ if (!empty($this->form_response)) {
                         <!-- #activate_edit_modal /-->
 
                         <!-- #activate_delete_modal -->
-                        <li class="btn btn-body btn-danger"
-                            id="activate_delete_modal"
-                            onclick="delete_media_modal(
+                        <li class="btn btn-body btn-danger" id="activate_delete_modal" onclick="delete_media_modal(
                                 '#id-<?= $media->id ?>',
                                 '#link-<?= $media->id ?>',
                                 delete_modal_form
@@ -239,17 +227,17 @@ if (!empty($this->form_response)) {
 
         <!-- .edit-modal-file-detail -->
         <div class="edit-modal-file-detail">
-            <form action="<?= WEB_ROOT ?>admin/library/edit" method="POST" id="edit_modal_form" >
-                <input type="text" name='id' id="edit_object_id" />
-                <input type="text" name='file' id="edit_object_link" />
+            <form action="<?= WEB_ROOT ?>admin/library/edit" method="POST" id="edit_modal_form">
+                <input type="hidden" name='id' id="edit_object_id" />
+                <input type="hidden" name='file' id="edit_object_link" />
 
                 <div>
                     <label for="">File Name</label>
-                    <input type="text" name="name" id="name"/>
+                    <input type="text" name="name" id="name" />
                 </div>
                 <div>
                     <label for="">Alternative Text</label>
-                    <input type="text" name="alt-text" id="alt_text"/>
+                    <input type="text" name="alt-text" id="alt_text" />
                 </div>
                 <div>
                     <label for="">Description</label>
@@ -265,16 +253,13 @@ if (!empty($this->form_response)) {
                 </div>
                 <div class="edit-modal-actions">
                     <ul>
-                        <li><a 
-                            class="text-danger"
-                            id="activate_delete_modal"
-                            onclick="delete_media_modal(
+                        <li><a class="text-danger" id="activate_delete_modal" onclick="delete_media_modal(
                                 '#edit_object_id',
                                 '#edit_object_link',
-                                delete_modal_form
+                                'delete_modal_form'
                             )">Delete Permanently</a></li>
                         <li>
-                                <input type="submit" class="btn btn-body" value="Save" />
+                            <input type="submit" class="btn btn-body" value="Save" />
                         </li>
                     </ul>
                 </div>
@@ -287,10 +272,41 @@ if (!empty($this->form_response)) {
 <!-- .edit-modal /-->
 
 <script>
-    const uploader_toggler = document.querySelector('.uploader-toggler')
-    body = document.querySelector('body')
+    window.onload = () => {
+        const uploader_toggler = document.querySelector('.uploader-toggler')
+        const body = document.querySelector('body')
 
-    uploader_toggler.addEventListener('click', (event) => {
-        body.classList.toggle('show-uploader')   
-    })
+        uploader_toggler.addEventListener('click', (event) => {
+            body.classList.toggle('show-uploader')
+        })
+
+        const search_bar = $('#search-bar')
+
+        search_bar.addEventListener('keyup', (event) => {
+            const keyword = search_bar.value
+
+            const ajax = new Ajax(
+                'get',
+                '<?= WEB_ROOT ?>admin/library/search',
+                '#media-files',
+                `keyword=${keyword}&async=true`
+            )
+        })
+
+        /**
+         * File filter.
+         */
+        let filter = document.querySelector('#filter')
+
+        filter.addEventListener('change', () => {
+            let filter_by = filter.value
+
+            const ajax = new Ajax(
+                'get',
+                '<?= WEB_ROOT ?>admin/library/filter',
+                '#media-files',
+                `filter=${filter_by}&async=true`
+            )
+        })
+    }
 </script>

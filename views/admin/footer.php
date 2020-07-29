@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The footer of the Default Admin Theme
  *
@@ -11,15 +12,16 @@
  * @since Admin 1.0
  */
 ?>
-                </section>
-                <!-- .main-section /-->
-            </div>
-            <!-- .flexbox .container -->
-        </main>
-        <footer>
-            <script src="<?= WEB_ROOT ?>views\admin\assets\js\loader.js"></script>
-            <script  src="<?= WEB_ROOT ?>views\admin\assets\js\ajax.js"></script>
-            <script src="<?= WEB_ROOT ?>views\admin\assets\js\main.js"></script>
-        </footer>
-    </body>
+</section>
+<!-- .main-section /-->
+</div>
+<!-- .flexbox .container -->
+</main>
+<footer>
+    <script src="<?= WEB_ROOT ?>views\admin\assets\js\loader.js"></script>
+    <script src="<?= WEB_ROOT ?>views\admin\assets\js\ajax.js"></script>
+    <script src="<?= WEB_ROOT ?>views\admin\assets\js\main.js"></script>
+</footer>
+</body>
+
 </html>

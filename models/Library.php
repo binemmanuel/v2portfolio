@@ -1,4 +1,5 @@
 <?php
+
 namespace model;
 
 use portfolio\BaseModel;
@@ -12,22 +13,41 @@ class Library extends BaseModel
     function __construct()
     {
         parent::__construct();
+
+        $this->media = new PortfolioLibrary;
+
+        // Instantiate an Object.
+        $this->response = new stdClass;
     }
 
     public function get(int $id = null)
     {
-        $media = new PortfolioLibrary($id);
-        
-        $response = $media->get_all();
+        $this->media->id = $id;
+        $this->response = $this->media->get_all();
 
-        return $response;
+        return $this->response;
+    }
+
+    public function filter(array $data)
+    {
+        $file_type = clean_data($data['filter']);
+
+        $this->response = $this->media->get_all($file_type);
+
+        return $this->response;
+    }
+
+    public function search(array $data)
+    {
+        $keyword = (!empty($data['keyword'])) ? clean_data($data['keyword']) : '';
+
+        $this->response = $this->media->search($keyword);
+
+        return $this->response;
     }
 
     public function edit(array $data): object
     {
-        // Instantiate an Object.
-        $response = new stdClass;
-
         $library = new PortfolioLibrary();
         $library->id = (int) (!empty($data['id'])) ? clean_data($data['id']) : null;
         $library->name = (string) (!empty($data['name'])) ? clean_data($data['name']) : null;
@@ -38,47 +58,47 @@ class Library extends BaseModel
         // Update the file
         if ($library->update()) {
             // Store success message.
-            $response->error = false;
-            $response->message = "Upldated successfully.";
-            $response->error_type = null;
+            $this->response->error = false;
+            $this->response->message = "Upldated successfully.";
+            $this->response->error_type = null;
         }
-        
-        return $response;
+
+        return $this->response;
     }
 
     public function delete(array $data): object
     {
-        // Instantiate an Object.
-        $response = new stdClass;
+        // Instantiate a Library Obejct.
+        $library = new PortfolioLibrary;
 
-        $library = new PortfolioLibrary();
+        // Set file ID.
         $library->id = (int) (!empty($data['id'])) ? clean_data($data['id']) : null;
+
+        // Replace "\" with "/".
+        $data['file'] = clean_data(str_replace('\\', '/', $data['file']));
 
         // Delete the file
         if (file_exists(urldecode($data['file']))) {
             if ($library->delete() && unlink(urldecode($data['file']))) {
                 // Store success message.
-                $response->error = false;
-                $response->message = "Deleted successfully.";
-                $response->error_type = null;
+                $this->response->error = false;
+                $this->response->message = "Deleted successfully.";
+                $this->response->error_type = null;
             }
         }
-        return $response;
+        return $this->response;
     }
 
     public function save(array $data): object
     {
-        // Instantiate an Object.
-        $response = new stdClass;
-
         if (
             empty($data['name']) &&
             empty($data['files'])
         ) {
             // Store an error message.
-            $response->error = true;
-            $response->message = 'No file was selected to be uploaded.';
-            $response->error_type = 'upload';
+            $this->response->error = true;
+            $this->response->message = 'No file was selected to be uploaded.';
+            $this->response->error_type = 'upload';
         } else {
             // Uploaded By.
             $uploaded_by = 'Bin Emmanuel'; // Chenge this.
@@ -89,18 +109,18 @@ class Library extends BaseModel
             $file_extension = strtolower(pathinfo($data['files']['name'], PATHINFO_EXTENSION));
 
             // Store the file name.
-            $file_name = "[binemmanul.com]_". md5(uniqid() . strtolower($data['files']['name'])) .'.'. $file_extension; // add a prefix to the file name.
+            $file_name = "[binemmanul.com]_" . md5(uniqid() . strtolower($data['files']['name'])) . '.' . $file_extension; // add a prefix to the file name.
 
             // Validate file.
             if ($this->is_image($file_name)) {
                 // Target directory.
                 $target_dir = IMAGE_PATH;
-                
+
                 // Where is store the file.
                 $target_file = $target_dir . basename(clean_data($file_name));
 
                 // Store the file type.
-                $file_type = clean_data('image/'. $this->file_type($file_name));
+                $file_type = clean_data('image/' . $this->file_type($file_name));
 
                 // Upload the file.
                 if (!$this->upload_file(
@@ -110,25 +130,24 @@ class Library extends BaseModel
                     $uploaded_by
                 )) {
                     // Store an error message.
-                    $response->error = true;
-                    $response->message = "Sorry, something went wrong when trying to upload the file. $file_name";
-                    $response->error_type = 'upload';
+                    $this->response->error = true;
+                    $this->response->message = "Sorry, something went wrong when trying to upload the file. $file_name";
+                    $this->response->error_type = 'upload';
                 } else {
                     // Store success message.
-                    $response->error = false;
-                    $response->message = "File uploaded successfully. $file_name";
-                    $response->error_type = null;
+                    $this->response->error = false;
+                    $this->response->message = "File uploaded successfully. $file_name";
+                    $this->response->error_type = null;
                 }
-                
             } elseif ($this->is_video($file_name)) {
                 // Target directory.
                 $target_dir = VIDEO_PATH;
 
                 // Where is store the file.
                 $target_file = $target_dir . basename(clean_data($file_name));
-                
+
                 // Store the file type.
-                $file_type = clean_data('video/'. $this->file_type($file_name));
+                $file_type = clean_data('video/' . $this->file_type($file_name));
 
                 // Upload the file.
                 if (!$this->upload_file(
@@ -138,25 +157,24 @@ class Library extends BaseModel
                     $uploaded_by
                 )) {
                     // Store an error message.
-                    $response->error = true;
-                    $response->message = "Sorry, something went wrong when trying to upload the file. $file_name";
-                    $response->error_type = 'upload';
+                    $this->response->error = true;
+                    $this->response->message = "Sorry, something went wrong when trying to upload the file. $file_name";
+                    $this->response->error_type = 'upload';
                 } else {
                     // Store success message.
-                    $response->error = false;
-                    $response->message = "File uploaded successfully. $file_name";
-                    $response->error_type = null;
+                    $this->response->error = false;
+                    $this->response->message = "File uploaded successfully. $file_name";
+                    $this->response->error_type = null;
                 }
-
             } elseif ($this->is_zip($file_name)) {
                 // Target directory.
                 $target_dir = ZIP_PATH;
 
                 // Where is store the file.
                 $target_file = $target_dir . basename(clean_data($file_name));
-                
+
                 // Store the file type.
-                $file_type = clean_data('application/'. $this->file_type($file_name));
+                $file_type = clean_data('application/' . $this->file_type($file_name));
 
                 // Upload the file.
                 if (!$this->upload_file(
@@ -166,25 +184,24 @@ class Library extends BaseModel
                     $uploaded_by
                 )) {
                     // Store an error message.
-                    $response->error = true;
-                    $response->message = "Sorry, something went wrong when trying to upload the file. $file_name";
-                    $response->error_type = 'upload';
+                    $this->response->error = true;
+                    $this->response->message = "Sorry, something went wrong when trying to upload the file. $file_name";
+                    $this->response->error_type = 'upload';
                 } else {
                     // Store success message.
-                    $response->error = false;
-                    $response->message = "File uploaded successfully. $file_name";
-                    $response->error_type = null;
+                    $this->response->error = false;
+                    $this->response->message = "File uploaded successfully. $file_name";
+                    $this->response->error_type = null;
                 }
-
             } else {
                 // Store an error message.
-                $response->error = true;
-                $response->message = 'Invalid file type';
-                $response->error_type = 'upload';
+                $this->response->error = true;
+                $this->response->message = 'Invalid file type';
+                $this->response->error_type = 'upload';
             }
         }
 
-        return $response;
+        return $this->response;
     }
 
     /**
@@ -303,24 +320,24 @@ class Library extends BaseModel
     }
 
     /**
-	 * The function that gets file type of a given file.
-	 * 
-	 * @param string The File name.
-	 * 
-	 * @return string Returns the file type.
-	 */
-	public function file_type(string $file_name): string
-	{
-		// Store the target directory and target file.
-		$target_file = basename($file_name);
+     * The function that gets file type of a given file.
+     * 
+     * @param string The File name.
+     * 
+     * @return string Returns the file type.
+     */
+    public function file_type(string $file_name): string
+    {
+        // Store the target directory and target file.
+        $target_file = basename($file_name);
 
-		// Store file type.
-		$file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        // Store file type.
+        $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-		// Return the file type.
-		return $file_type;
+        // Return the file type.
+        return $file_type;
     }
-    
+
     /**
      * The function that gets file type of a given file.
      * 
@@ -332,12 +349,11 @@ class Library extends BaseModel
      * @return Bool false || true if th file was uploaded successfully.
      */
     public function upload_file(
-        string $tmp_file_name, 
-        string $target_file, 
-        string $file_type, 
+        string $tmp_file_name,
+        string $target_file,
+        string $file_type,
         string $uploaded_by
-    ): bool
-    {
+    ): bool {
         // Instantiate an Object.
         $library = new PortfolioLibrary;
         $library->link = (string) urlencode(clean_data($target_file));
@@ -349,7 +365,8 @@ class Library extends BaseModel
         // Then store file data.
         if (
             move_uploaded_file($tmp_file_name, $target_file) &&
-            $library->upload()) {
+            $library->upload()
+        ) {
             return true;
         }
 

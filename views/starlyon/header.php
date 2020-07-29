@@ -32,7 +32,7 @@ $site_info = (object) $site_info->fetch();
             <?php endif ?>
         </title>
 
-        <meta name="description" content="I'm a Full Web Developer from Abuja, Nigeria. I build high performance, scalable, mobile responsive and secure Web Applications that moves" />
+        <meta name="description" content="I'm a Full Stack Web Developer from Abuja, Nigeria. I build high performance, scalable, mobile responsive and secure Web Applications that moves" />
 
         <meta name=”robots” content="index, follow" />
 

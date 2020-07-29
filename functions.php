@@ -1,4 +1,5 @@
 <?php
+
 namespace portfolio;
 
 function clean_data($data)
@@ -30,7 +31,7 @@ function validate_role(string $role)
     if (in_array($role, $valid_roles)) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -53,14 +54,11 @@ function get_ip(): string
     // Check if IP is from shared internet.
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         $ip = clean_data($_SERVER['HTTP_CLIENT_IP']);
-
     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         $ip = clean_data($_SERVER['HTTP_X_FORWARDED_FOR']);
-
     } else {
         $ip = clean_data($_SERVER['REMOTE_ADDR']);
-        
-    } 
+    }
 
     return $ip;
 }
@@ -94,7 +92,7 @@ function validate_acc_status(string $status)
     if (in_array($status, $valid_status)) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -117,6 +115,6 @@ function validate_reg_option(string $option)
     if (in_array($option, $valid_reg_option)) {
         return true;
     }
-    
+
     return false;
 }

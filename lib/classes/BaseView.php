@@ -1,4 +1,5 @@
 <?php
+
 namespace portfolio;
 
 /**
@@ -15,10 +16,9 @@ class BaseView
 	 * @return Void Nothing.
 	 */
 	public function render(
-		string $view, 
+		string $view,
 		string $template = 'starlyon'
-	): void
-	{
+	): void {
 		switch ($view) {
 			case '/':
 				$view = 'index';
@@ -43,7 +43,7 @@ class BaseView
 			require "views/$template/footer.php";
 		}
 	}
-	
+
 	public function view_is(string $view): bool
 	{
 		$views = [
@@ -58,7 +58,7 @@ class BaseView
 		return false;
 	}
 
-	/* public function load(
+	public function load(
 		string $view, 
 		string $template = 'starlyon'
 	): void
@@ -70,5 +70,5 @@ class BaseView
 		}
 
 		require "views/$template/$view.php";
-	} */
+	}
 }

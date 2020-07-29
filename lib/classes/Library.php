@@ -1,5 +1,7 @@
 <?php
+
 namespace portfolio;
+
 use portfolio\Database;
 
 use function portfolio\clean_data;
@@ -60,7 +62,7 @@ class Library
 	 *	@var int The date the file was uploaded.
 	 */
 	public $uploadedOn;
-	
+
 	function __construct(int $id = null, string $name = null, string $link = null, string $caption = null, string $alt_text = null, string $description = null, string $type = null, string $uploaded_by = null, string $uploadedOn = null)
 	{
 		/*
@@ -69,10 +71,10 @@ class Library
 		if (!empty($id))
 			$this->id = (int) clean_data($id);
 
-		if (empty($name)){
+		if (empty($name)) {
 			// Split the link.
 			$split_URL = explode('/', $link);
-			
+
 			// Count and store.
 			$count = (count($split_URL) - 1);
 
@@ -136,7 +138,7 @@ class Library
 				return new Library($id, $name, $link, $caption, $alt_text, $description, $type, $uploaded_by, $uploadedOn);
 			}
 		}
-		
+
 		// Close Statement.
 		$stmt->close();
 
@@ -156,42 +158,54 @@ class Library
 		// Instantiate a DB object.
 		$db = new Database();
 
-		if (empty($type)) {
+		if (
+			empty($type) ||
+			strtolower($type) === 'all'
+		) {
 			// Prepare a statement.
-			$stmt = $db->prepare('SELECT * FROM me_library ORDER BY id DESC');	
+			$stmt = $db->prepare('SELECT * FROM me_library ORDER BY id DESC');
 		} else {
-			$type = '%'. $type .'%';
+			$type = "%{$type}%";
 
 			// Prepare a statement.
+			// $stmt = $db->prepare('SELECT * FROM me_library WHERE type like ? ORDER BY id DESC');
 			$stmt = $db->prepare('SELECT * FROM me_library WHERE type like ? ORDER BY id DESC');
 
 			// Bind Parameter.
 			$stmt->bind_param('s', $type);
 		}
 
+		// Initialize an empty array.
+		$data = [];
+
 		// Execute.
-		if ($stmt->execute()) {
-			// Bind result value.
-			$stmt->bind_result($id, $name, $link, $caption, $alt_text, $description, $type, $uploaded_by, $uploadedOn);
+		$stmt->execute();
 
-			// Initialize an empty array.
-			$data = [];
+		// Bind result value.
+		$stmt->bind_result($id, $name, $link, $caption, $alt_text, $description, $type, $uploaded_by, $uploadedOn);
 
-			// Retrieve rows.
-			while ($stmt->fetch()) {
-				// Instantiate an Object.
-				$media_files = new Library($id, $name, $link, $caption, $alt_text, $description, $type, $uploaded_by, $uploadedOn);
+		// Retrieve rows.
+		while ($stmt->fetch()) {
+			// Instantiate an Object.
+			$media_files = new Library;
 
-				// Store an array of objects.
-				array_push($data, $media_files);
-			}
+			// Set data.
+			$media_files->id = $id;
+			$media_files->name = $name;
+			$media_files->link = $link;
+			$media_files->caption = $caption;
+			$media_files->alt_text = $alt_text;
+			$media_files->description = $description;
+			$media_files->type = $type;
+			$media_files->uploaded_by = $uploaded_by;
+			$media_files->uploadedOn = $uploadedOn;
 
-			// Get the total number of categories that matched the criteria.
-			$totalRows = Library::getTotalRow();
-
-			return $data;
-
+			// Store an array of objects.
+			array_push($data, $media_files);
 		}
+
+		// Get the total number of categories that matched the criteria.
+		$totalRows = Library::getTotalRow();
 
 		// Close Statement.
 		$stmt->close();
@@ -199,7 +213,7 @@ class Library
 		// close connection.
 		$db->close();
 
-		return false;
+		return $data;
 	}
 
 	/**
@@ -228,7 +242,7 @@ class Library
 
 		// close connection.
 		$db->close();
-		
+
 		return 0;
 	}
 
@@ -237,10 +251,10 @@ class Library
 		// Instantiate a DB object.
 		$db = new Database();
 
-		$keyword = clean_data('%'. $keyword .'%');
+		$keyword = clean_data("%{$keyword}%");
 
 		// Prepare a statement.
-		$stmt = $db->prepare('SELECT * FROM me_library WHERE name OR link LIKE ?');
+		$stmt = $db->prepare('SELECT * FROM me_library WHERE name LIKE ? ORDER BY id DESC');
 
 		// Bind parameter.
 		$stmt->bind_param('s', $keyword);
@@ -251,16 +265,15 @@ class Library
 
 			// Initialize an empty array.
 			$data = [];
-			
+
 			while ($stmt->fetch()) {
 				// Instantiate an Object.
 				$search = new Library($id, $name, $link, $caption, $alt_text, $description, $type, $uploaded_by, $uploadedOn);
 
 				// Store an array of objects.
 				array_push($data, $search);
-
 			}
-			
+
 			return $data;
 		}
 
@@ -271,7 +284,6 @@ class Library
 		$db->close();
 
 		return false;
-		
 	}
 
 	/**
@@ -310,7 +322,7 @@ class Library
 			$this->description,
 			$this->uploaded_by
 		);
-		
+
 		// Execute.
 		if ($stmt->execute()) {
 			return true;
@@ -349,7 +361,7 @@ class Library
 				description = ?
 			WHERE
 				id = ?'
-			);
+		);
 
 		// Bind Parameters.
 		$stmt->bind_param(
@@ -369,7 +381,7 @@ class Library
 		$stmt->close();
 
 		// close connec
-		
+
 		return false;
 	}
 
@@ -390,7 +402,7 @@ class Library
 
 		// Bind parameter.
 		$stmt->bind_param('i', $this->id);
-		
+
 		if ($stmt->execute()) {
 			return true;
 		}
