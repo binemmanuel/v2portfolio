@@ -38,7 +38,7 @@ $site_info = (object) $site_info->fetch();
     <!-- <link rel="stylesheet" href="<?= WEB_ROOT ?>views\admin\assets\css\font-awesome.min.css" /> -->
 
     <!-- Font Awesome Kit -->
-    <script src="https://kit.fontawesome.com/9c7ec8e97d.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/9c7ec8e97d.js" samesite="" crossorigin="anonymous"></script>
 </head>
 
 <body>
